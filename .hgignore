@@ -2,7 +2,13 @@
 syntax: glob
 
 syntax: regexp
+Makefile$
+Makefile\.in$
+
 ^\.git/
 ^\.Config/
 ^\.M4/InitAutoMake.m4$
-
+^References$
+^aclocal\.m4$
+^autom4te\.cache\/
+^configure$
