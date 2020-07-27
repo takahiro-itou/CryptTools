@@ -3,4 +3,6 @@ syntax: glob
 
 syntax: regexp
 ^\.git/
+^\.Config/
+^\.M4/InitAutoMake.m4$
 
