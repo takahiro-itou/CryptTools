@@ -1,0 +1,48 @@
+//  -*-  coding: utf-8; mode: c++  -*-  //
+/*************************************************************************
+**                                                                      **
+**                      ---  Encryption Tools  ---                      **
+**                                                                      **
+**          Copyright (C), 2020-2020, Takahiro Itou                     **
+**          All Rights Reserved.                                        **
+**                                                                      **
+**          License: (See COPYING and LICENSE files)                    **
+**          GNU General Public License (GPL) version 3,                 **
+**          or (at your option) any later version.                      **
+**                                                                      **
+*************************************************************************/
+
+/**
+**      スクリプトによる設定値が書き込まれるヘッダファイル。
+**
+**      @file       .Config/ConfiguredEncryptionTools.h.in
+**/
+
+#if !defined( ENCRYPTTOOL_CONFIG_INCLUDED_CONFIGURED_ENCRYPTION_TOOLS_H )
+#    define   ENCRYPTTOOL_CONFIG_INCLUDED_CONFIGURED_ENCRYPTION_TOOLS_H
+
+//========================================================================
+//
+//    Name Space.
+//
+
+/**
+**    スクリプトによって設定された名前空間。
+**/
+
+#define     ENCRYPTTOOL_CNF_NF                  \
+    @ENCRYPTION_TOOLS_CNF_NAMESPACE@
+
+/**
+**    名前空間。
+**/
+
+#define     ENCRYPTION_TOOLS_NAMESPACE          ENCRYPTTOOL_CNF_NS
+
+#define     ENCRYPTION_TOOLS_NAMESPACE_BEGIN    \
+    namespace  ENCRYPTTOOL_CNF_NS  {
+
+#define     ENCRYPTION_TOOLS_NAMESPACE_END      \
+    }
+
+#endif
