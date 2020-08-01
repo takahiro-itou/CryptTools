@@ -1,7 +1,7 @@
 //  -*-  coding: utf-8; mode: c++  -*-  //
 /*************************************************************************
 **                                                                      **
-**                      ---  Encryption Tools  ---                      **
+**              ---   The Cryption Library and Tools   ---              **
 **                                                                      **
 **          Copyright (C), 2020-2020, Takahiro Itou                     **
 **          All Rights Reserved.                                        **
@@ -15,11 +15,11 @@
 /**
 **      スクリプトによる設定値が書き込まれるヘッダファイル。
 **
-**      @file       .Config/ConfiguredEncryptionTools.h.in
+**      @file       .Config/ConfiguredCryptTools.h.in
 **/
 
-#if !defined( ENCRYPTTOOL_CONFIG_INCLUDED_CONFIGURED_ENCRYPTION_TOOLS_H )
-#    define   ENCRYPTTOOL_CONFIG_INCLUDED_CONFIGURED_ENCRYPTION_TOOLS_H
+#if !defined( CRYPTTOOLS_CONFIG_INCLUDED_CONFIGURED_CRYPT_TOOLS_H )
+#    define   CRYPTTOOLS_CONFIG_INCLUDED_CONFIGURED_CRYPT_TOOLS_H
 
 //========================================================================
 //
@@ -30,19 +30,16 @@
 **    スクリプトによって設定された名前空間。
 **/
 
-#define     ENCRYPTTOOL_CNF_NF                  \
-    @ENCRYPTION_TOOLS_CNF_NAMESPACE@
+#define     CRYPTTOOLS_CNF_NS               @CRYPTTOOLS_CNF_NAMESPACE@
 
 /**
 **    名前空間。
 **/
 
-#define     ENCRYPTION_TOOLS_NAMESPACE          ENCRYPTTOOL_CNF_NS
+#define     CRYPTTOOLS_NAMESPACE            CRYPTTOOLS_CNF_NS
 
-#define     ENCRYPTION_TOOLS_NAMESPACE_BEGIN    \
-    namespace  ENCRYPTTOOL_CNF_NS  {
+#define     CRYPTTOOLS_NAMESPACE_BEGIN      namespace  CRYPTTOOLS_CNF_NS  {
 
-#define     ENCRYPTION_TOOLS_NAMESPACE_END      \
-    }
+#define     CRYPTTOOLS_NAMESPACE_END        }
 
 #endif

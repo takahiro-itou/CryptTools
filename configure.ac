@@ -16,10 +16,10 @@ dnl   パッケージの情報を指定する。
 dnl
 
 AC_INIT(
-    [EncryptionTools],
+    [CryptTools],
     [0.0.0],
     [BUG-REPORT-ADDRESS],
-    [EncryptionTools])
+    [CryptTools])
 
 dnl
 dnl   ツールの出力ディレクトリを指定する。
@@ -54,8 +54,8 @@ dnl
 dnl   Project Name Space.
 dnl
 
-ENCRYPTION_TOOLS_CNF_NAMESPACE=EncryptionTools
-AC_SUBST(ENCRYPTION_TOOLS_CNF_NAMESPACE)
+CRYPT_TOOLS_CNF_NAMESPACE=CryptTools
+AC_SUBST(CRYPT_TOOLS_CNF_NAMESPACE)
 
 dnl----------------------------------------------------------------
 dnl
@@ -66,7 +66,7 @@ m4_include([.M4/ConfigDirectory.m4])
 
 MYAC_CUSTOMIZE_LIBRARY_DIR([Lib])
 MYAC_CUSTOMIZE_INCLUDE_DIR(
-    [Include], [EncryptionTools], [.Config], [Config.h])
+    [Include], [CryptTools], [.Config], [Config.h])
 
 dnl----------------------------------------------------------------
 dnl
