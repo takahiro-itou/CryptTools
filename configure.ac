@@ -54,8 +54,8 @@ dnl
 dnl   Project Name Space.
 dnl
 
-CRYPT_TOOLS_CNF_NAMESPACE=CryptTools
-AC_SUBST(CRYPT_TOOLS_CNF_NAMESPACE)
+CRYPTTOOLS_CNF_NAMESPACE=CryptTools
+AC_SUBST(CRYPTTOOLS_CNF_NAMESPACE)
 
 dnl----------------------------------------------------------------
 dnl
@@ -116,9 +116,14 @@ dnl   Basic Features.
 dnl
 
 AC_CONFIG_FILES([
+    .M4/Makefile
     Makefile
     Bin/Makefile
     Lib/Makefile
+])
+
+AC_CONFIG_FILES([
+    Include/CryptTools/.Config/ConfiguredCryptTools.h
 ])
 
 dnl
