@@ -49,7 +49,13 @@ Set (CRYPTTOOLS_CNF_NAMESPACE   CryptTools)
 
 Configure_File (
     "${INCLUDE_SOURCE_DIR}/.Config/ConfiguredCryptTools.h.in"
-    "${INCLUDE_BINARY_DIR}/.Config/ConfiguredCryptTools.h")
+    "${INCLUDE_BINARY_DIR}/.Config/ConfiguredCryptTools.h"
+)
+
+Configure_File (
+    "${INCLUDE_SOURCE_DIR}/.Config/Config.h.cmake.in"
+    "${INCLUDE_BINARY_DIR}/.Config/.${PROJECT_NAME}.Config.h"
+)
 
 ##
 ##    インクルードパスの設定。
@@ -57,6 +63,21 @@ Configure_File (
 
 Include_Directories ("${PROJECT_SOURCE_DIR}/Include")
 Include_Directories ("${PROJECT_BINARY_DIR}/Include")
+
+##----------------------------------------------------------------
+##
+##    パッケージコンフィグレーション。
+##
+
+Configure_File (
+    "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    @ONLY
+)
+
+Install (FILES  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        DESTINATION  .
+)
 
 ##----------------------------------------------------------------
 ##
