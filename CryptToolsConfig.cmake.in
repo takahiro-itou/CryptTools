@@ -20,7 +20,7 @@ Set (@PROJECT_NAME@_MODULE_DIRS_LIST
 
 ##  カレントディレクトリの名前を取得する。
 
-Set_FileName_Component (@PROJECT_NAME@_ROOT_DIR
+Get_FileName_Component (@PROJECT_NAME@_ROOT_DIR
         "${CMAKE_CURRENT_LIST_FILE}"  PATH)
 
 ##  ライブラリファイルが格納されるトップディレクトリ。
@@ -53,4 +53,3 @@ ForEach (@PROJECT_NAME@_MODULE_NAME  ${@PROJECT_NAME@_MODULE_DIRS_LIST})
     EndForEach ()
 
 EndForEach()
-
