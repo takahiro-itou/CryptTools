@@ -9,5 +9,9 @@
 
 dist_noinst_DATA    =  \
     BuildLibraryCommon.cmake  \
+    CheckConstExpr.cmake      \
+    CheckNullPtr.cmake        \
+    CheckOverride.cmake       \
+    EnableCxx11.cmake         \
     FindCppUnit.cmake
 
