@@ -46,6 +46,8 @@ Set (INCLUDE_BINARY_DIR    "${INCTOP_BINARY_DIR}/${INCPKG_DIR_NAME}")
 ##    ビルド環境の検査。
 ##
 
+Include (${COMMON_CMAKE_DIR}/EnableCxx11.cmake)
+
 ##
 ##    Project Name Space.
 ##
