@@ -312,9 +312,6 @@ void  AdvancedEncryptionStandardTest::testReadSBoxTable()
             | ((c5 & 1) << 5)
             | ((c6 & 1) << 6)
             | ((c7 & 1) << 7);
-        std::cerr   <<  i   <<  " : "
-                    <<  c7  <<  c6  <<  c5  <<  c4
-                    <<  c3  <<  c2  <<  c1  <<  c0  <<  std::endl;
         CPPUNIT_ASSERT_EQUAL(expect, actual);
     }
 }
