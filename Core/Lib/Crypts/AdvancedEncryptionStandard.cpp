@@ -91,5 +91,19 @@ AdvancedEncryptionStandard::~AdvancedEncryptionStandard()
 //    For Internal Use Only.
 //
 
+//----------------------------------------------------------------
+//    各ラウンド用のキーを生成する。
+//
+
+ErrCode
+AdvancedEncryptionStandard::generateRoundKeys(
+        const   LpcByte     baseKey,
+        const   int         keySize,
+        const   int         numRounds,
+        CryptRoundKeys    & outKeys)
+{
+    return ( ERR_FAILURE );
+}
+
 }   //  End of namespace  Crypts
 CRYPTTOOLS_NAMESPACE_END

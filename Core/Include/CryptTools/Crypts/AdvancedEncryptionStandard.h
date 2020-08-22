@@ -23,6 +23,8 @@
 
 #include    "CryptTools/Common/CryptToolsSettings.h"
 
+#include    <vector>
+
 CRYPTTOOLS_NAMESPACE_BEGIN
 namespace  Crypts  {
 
@@ -38,6 +40,11 @@ class  AdvancedEncryptionStandard
 //
 //    Internal Type Definitions.
 //
+public:
+
+    typedef     BtWord[4]               WordKey;
+
+    typedef     std::vector<WordKey>    CryptRoundKeys;
 
 //========================================================================
 //
@@ -93,6 +100,26 @@ public:
 //
 //    For Internal Use Only.
 //
+private:
+
+    //----------------------------------------------------------------
+    /**   各ラウンド用のキーを生成する。
+    **
+    **  @param [in] baseKey     暗号化鍵。
+    **  @param [in] keySize     キーサイズ（ワード単位）。
+    **  @param [in] numRounds   ラウンド数。
+    **  @param[out] outKeys     生成されたラウンド用キー。
+    **  @return     エラーコードを返す。
+    **      -   異常終了の場合は、
+    **          エラーの種類を示す非ゼロ値を返す。
+    **      -   正常終了の場合は、ゼロを返す。
+    **/
+    static  ErrCode
+    generateRoundKeys(
+            const   LpcByte     baseKey,
+            const   int         keySize,
+            const   int         numRounds,
+            CryptRoundKeys    & outKeys);
 
 //========================================================================
 //
