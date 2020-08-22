@@ -42,7 +42,11 @@ class  AdvancedEncryptionStandard
 //
 public:
 
-    typedef     BtWord                  WordKey[4];
+    enum  {
+        NUM_WORDS_IN_ROUND_KEY  = 4
+    };
+
+    typedef     BtWord      WordKey[NUM_WORDS_IN_ROUND_KEY];
 
     typedef     std::vector<WordKey>    CryptRoundKeys;
 
