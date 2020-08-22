@@ -23,6 +23,7 @@
 
 #include    "CryptTools/Common/CryptToolsTypes.h"
 
+#include    <array>
 #include    <vector>
 
 CRYPTTOOLS_NAMESPACE_BEGIN
@@ -46,7 +47,7 @@ public:
         NUM_WORDS_IN_ROUND_KEY  = 4
     };
 
-    typedef     BtWord      WordKey[NUM_WORDS_IN_ROUND_KEY];
+    typedef     std::array<BtWord, NUM_WORDS_IN_ROUND_KEY>  WordKey;
 
     typedef     std::vector<WordKey>    CryptRoundKeys;
 
