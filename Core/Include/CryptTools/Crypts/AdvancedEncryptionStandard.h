@@ -21,7 +21,7 @@
 #if !defined( CRYPTTOOLS_COMMON_INCLUDED_ADVANCED_ENCRYPTION_STANDARD_H )
 #    define   CRYPTTOOLS_COMMON_INCLUDED_ADVANCED_ENCRYPTION_STANDARD_H
 
-#include    "CryptTools/Common/CryptToolsSettings.h"
+#include    "CryptTools/Common/CryptToolsTypes.h"
 
 #include    <vector>
 
@@ -42,7 +42,7 @@ class  AdvancedEncryptionStandard
 //
 public:
 
-    typedef     BtWord[4]               WordKey;
+    typedef     BtWord                  WordKey[4];
 
     typedef     std::vector<WordKey>    CryptRoundKeys;
 

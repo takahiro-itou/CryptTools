@@ -24,6 +24,7 @@
 #include    "CryptToolsSettings.h"
 
 #include    <stddef.h>
+#include    <stdint.h>
 
 CRYPTTOOLS_NAMESPACE_BEGIN
 
@@ -139,6 +140,23 @@ template  <typename  T>
 T  pointer_cast(const  void  *  p)
 {
     return ( static_cast<T>(p) );
+}
+
+//========================================================================
+//
+//    配列操作。
+//
+
+//----------------------------------------------------------------
+/**   静的配列の要素数を取得する。
+**
+**/
+
+template <typename  T,  size_t  N>
+const   size_t
+getArraySize(const  T  (&)[N])
+{
+    return ( N );
 }
 
 CRYPTTOOLS_NAMESPACE_END
