@@ -194,5 +194,17 @@ AdvancedEncryptionStandard::generateRoundKeys(
     return ( ERR_SUCCESS );
 }
 
+//----------------------------------------------------------------
+//    テーブル SBox の内容を参照する
+//  （単体テスト用インターフェイス）。
+//
+
+BtByte
+AdvancedEncryptionStandard::readSBoxTable(
+        const   BtByte  byteVal)
+{
+    return ( g_tblSBox[byteVal] );
+}
+
 }   //  End of namespace  Crypts
 CRYPTTOOLS_NAMESPACE_END

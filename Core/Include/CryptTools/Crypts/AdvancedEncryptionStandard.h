@@ -126,6 +126,17 @@ private:
             const   int         numRounds,
             CryptRoundKeys    & outKeys);
 
+    //----------------------------------------------------------------
+    /**   テーブル SBox の内容を参照する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in] byteVal
+    **  @return
+    **/
+    static  BtByte
+    readSBoxTable(
+            const   BtByte  byteVal);
+
 //========================================================================
 //
 //    Member Variables.
