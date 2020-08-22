@@ -1,4 +1,4 @@
-//  -*-  coding: utf-8; mode: c++  -*-  //
+﻿//  -*-  coding: utf-8-with-signature;  mode: c++  -*-  //
 /*************************************************************************
 **                                                                      **
 **              ---   The Cryption Library and Tools   ---              **
@@ -13,28 +13,28 @@
 *************************************************************************/
 
 /**
-**      An Implementation of Test Case 'CryptToolsSettings'.
+**      An Implementation of Test Case 'AdvancedEncryptionStandard'.
 **
-**      @file       Common/Tests/CryptToolsSettingsTest.cpp
+**      @file       Crypts/Tests/AdvancedEncryptionStandardTest.cpp
 **/
 
 #include    "TestDriver.h"
-#include    "CryptTools/Common/CryptToolsSettings.h"
+#include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
 
 CRYPTTOOLS_NAMESPACE_BEGIN
 
 //========================================================================
 //
-//    CryptToolsSettingsTest  class.
+//    AdvancedEncryptionStandardTest  class.
 //
 /**
-**    クラス CryptToolsSettings の単体テスト。
+**    クラス AdvancedEncryptionStandard の単体テスト。
 **/
 
-class  CryptToolsSettingsTest : public  TestFixture
+class  AdvancedEncryptionStandardTest : public  TestFixture
 {
-    CPPUNIT_TEST_SUITE(CryptToolsSettingsTest);
-    CPPUNIT_TEST(testNameSpace);
+    CPPUNIT_TEST_SUITE(AdvancedEncryptionStandardTest);
+    CPPUNIT_TEST(testAdvancedEncryptionStandard);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -42,18 +42,19 @@ public:
     virtual  void   tearDown()  override    { }
 
 private:
-    void  testNameSpace();
+    void  testAdvancedEncryptionStandard();
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION( CryptToolsSettingsTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( AdvancedEncryptionStandardTest );
 
 //========================================================================
 //
 //    Tests.
 //
 
-void  CryptToolsSettingsTest::testNameSpace()
+void  AdvancedEncryptionStandardTest::testAdvancedEncryptionStandard()
 {
+    AdvancedEncryptionStandardTest  aes;
     return;
 }
 
