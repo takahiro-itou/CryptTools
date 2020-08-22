@@ -42,6 +42,7 @@ class  AdvancedEncryptionStandardTest : public  TestFixture
     CPPUNIT_TEST(testGenerateRoundKeys2);
     CPPUNIT_TEST(testGenerateRoundKeys3);
     CPPUNIT_TEST(testGenerateRoundKeys4);
+    CPPUNIT_TEST(testReadSBoxTable);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -64,6 +65,7 @@ private:
     void  testGenerateRoundKeys2();
     void  testGenerateRoundKeys3();
     void  testGenerateRoundKeys4();
+    void  testReadSBoxTable();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AdvancedEncryptionStandardTest );
@@ -244,6 +246,77 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys4()
             ERR_SUCCESS,
             Testee::generateRoundKeys(keys, 8, 14, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
+}
+
+void  AdvancedEncryptionStandardTest::testReadSBoxTable()
+{
+    BtWord  tableInvs[256] = {};
+    BtWord  tablePows[6][52] = {};
+    BtWord  tmpPoly[6] = {
+        0x00000001, 0x00000001,
+        0x00000003, 0x000000f6,
+        0x00000005, 0x00000052
+    };
+
+    for ( int idx = 0; idx < 256; ++ idx ) {
+        tableInvs[idx]  = 0;
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        BtWord  curPoly = tmpPoly[j];
+        for ( int i = 0; i < 52; ++ i ) {
+            tablePows[j][i] = (curPoly & 0xFF);
+            curPoly <<= 1;
+            if ( curPoly & 0x00000100 ) {
+                curPoly ^= 0x0000011B;
+            }
+        }
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        for ( int i = 0; i < 52; ++ i ) {
+            BtByte  src = tablePows[j][i];
+            BtByte  trg = tablePows[j ^ 1][51 - i];
+            tableInvs[src]  = trg;
+        }
+    }
+
+    for ( int i = 0; i <= 255; ++ i ) {
+        const   BtByte  val     = static_cast<BtByte>(i);
+        const   int     actual  = Testee::readSBoxTable(val);
+
+        BtByte  tmp = val;
+        tmp = tableInvs[tmp];
+
+        const  int  b0  = (tmp     ) & 0x01;
+        const  int  b1  = (tmp >> 1) & 0x01;
+        const  int  b2  = (tmp >> 2) & 0x01;
+        const  int  b3  = (tmp >> 3) & 0x01;
+        const  int  b4  = (tmp >> 4) & 0x01;
+        const  int  b5  = (tmp >> 5) & 0x01;
+        const  int  b6  = (tmp >> 6) & 0x01;
+        const  int  b7  = (tmp >> 7) & 0x01;
+
+        const  int  c7  = (b7 ^ b6 ^ b5 ^ b4 ^ b3) ^ 0;
+        const  int  c6  = (b6 ^ b5 ^ b4 ^ b3 ^ b2) ^ 1;
+        const  int  c5  = (b5 ^ b4 ^ b3 ^ b2 ^ b1) ^ 1;
+        const  int  c4  = (b4 ^ b3 ^ b2 ^ b1 ^ b0) ^ 0;
+        const  int  c3  = (b3 ^ b2 ^ b1 ^ b0 ^ b7) ^ 0;
+        const  int  c2  = (b2 ^ b1 ^ b0 ^ b7 ^ b6) ^ 0;
+        const  int  c1  = (b1 ^ b0 ^ b7 ^ b6 ^ b5) ^ 1;
+        const  int  c0  = (b0 ^ b7 ^ b6 ^ b5 ^ b4) ^ 1;
+
+        const  int  expect  = (c0 & 1)
+            | ((c1 & 1) << 1)
+            | ((c2 & 1) << 2)
+            | ((c3 & 1) << 3)
+            | ((c4 & 1) << 4)
+            | ((c5 & 1) << 5)
+            | ((c6 & 1) << 6)
+            | ((c7 & 1) << 7);
+        std::cerr   <<  i   <<  " : "
+                    <<  c7  <<  c6  <<  c5  <<  c4
+                    <<  c3  <<  c2  <<  c1  <<  c0  <<  std::endl;
+        CPPUNIT_ASSERT_EQUAL(expect, actual);
+    }
 }
 
 }   //  End of namespace  Crypts
