@@ -18,6 +18,8 @@
 **      @file       Crypts/AdvancedEncryptionStandard.cpp
 **/
 
+#include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
+
 CRYPTTOOLS_NAMESPACE_BEGIN
 namespace  Crypts  {
 
