@@ -28,7 +28,7 @@ namespace  {
 /**
 **    多項式 m(x) = x^8 + x^4 + x^3 + x + 1
 **/
-CONSTEXPR_VAR   BtWord  GEN_POLY_MX         = 0x0000001B;
+CONSTEXPR_VAR   BtWord  GEN_POLY_MX         = 0x0000011B;
 
 CONSTEXPR_VAR   BtWord  GEN_POLY_MX_MASK    = 0x00000100;
 
