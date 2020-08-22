@@ -39,6 +39,9 @@ class  AdvancedEncryptionStandardTest : public  TestFixture
     CPPUNIT_TEST_SUITE(AdvancedEncryptionStandardTest);
     CPPUNIT_TEST(testAdvancedEncryptionStandard);
     CPPUNIT_TEST(testGenerateRoundKeys1);
+    CPPUNIT_TEST(testGenerateRoundKeys2);
+    CPPUNIT_TEST(testGenerateRoundKeys3);
+    CPPUNIT_TEST(testGenerateRoundKeys4);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -58,7 +61,9 @@ private:
 private:
     void  testAdvancedEncryptionStandard();
     void  testGenerateRoundKeys1();
-
+    void  testGenerateRoundKeys2();
+    void  testGenerateRoundKeys3();
+    void  testGenerateRoundKeys4();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AdvancedEncryptionStandardTest );
@@ -130,6 +135,114 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys1()
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
             Testee::generateRoundKeys(keys, 4, 10, w));
+    CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
+}
+
+void  AdvancedEncryptionStandardTest::testGenerateRoundKeys2()
+{
+    typedef     Testee::CryptRoundKeys  CryptRoundKeys;
+
+    Testee          aes;
+    CryptRoundKeys  w;
+
+    const   BtByte  keys[16] = {
+        0x00, 0x01, 0x02, 0x03,     0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0A, 0x0B,     0x0C, 0x0D, 0x0E, 0x0F
+    };
+
+    const   Testee::WordKey     expect[] = {
+        { 0x03020100, 0x07060504, 0x0B0A0908, 0x0F0E0D0C },
+        { 0xFD74AAD6, 0xFA72AFD2, 0xF178A6DA, 0xFE76ABD6 },
+        { 0x0BCF92B6, 0xF1BD3D64, 0x00C59BBE, 0xFEB33068 },
+        { 0x4E74FFB6, 0xBFC9C2D2, 0xBF0C596C, 0x41BF6904 },
+        { 0xBCF7F747, 0x033E3595, 0xBC326CF9, 0xFD8D05FD },
+        { 0xE8A3AA3C, 0xEB9D9FA9, 0x57AFF350, 0xAA22F6AD },
+        { 0x7D0F395E, 0x9692A6F7, 0xC13D55A7, 0x6B1FA30A },
+        { 0x1A70F914, 0x8CE25FE3, 0x4DDF0A44, 0x26C0A94E },
+        { 0x35874347, 0xB9651CA4, 0xF4BA16E0, 0xD27ABFAE },
+        { 0xD1329954, 0x685785F0, 0x9CED9310, 0x4E972CBE },
+        { 0x7F1D1113, 0x174A94E3, 0x8BA707F3, 0xC5302B4D }
+    };
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(keys, 4, 10, w));
+    CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
+}
+
+void  AdvancedEncryptionStandardTest::testGenerateRoundKeys3()
+{
+    typedef     Testee::CryptRoundKeys  CryptRoundKeys;
+
+    Testee          aes;
+    CryptRoundKeys  w;
+
+    const   BtByte  keys[32] = {
+        0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00
+    };
+
+    const   Testee::WordKey     expect[] = {
+        { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
+        { 0x63636362, 0x63636362, 0x63636362, 0x63636362 },
+        { 0xFBFBFBAA, 0xFBFBFBAA, 0xFBFBFBAA, 0xFBFBFBAA },
+        { 0xCF6C6C6F, 0xAC0F0F0D, 0xCF6C6C6F, 0xAC0F0F0D },
+        { 0x6A8D8D7D, 0x917676D7, 0x6A8D8D7D, 0x917676D7 },
+        { 0xC1ED5453, 0x6DE25B5E, 0xA28E3731, 0x0E81383C },
+        { 0xC1818A96, 0x50F7FC41, 0x3A7A713C, 0xAB0C07EB },
+        { 0x288FAA9E, 0x456DF1C0, 0xE7E3C6F1, 0xE962FECD },
+        { 0xDF2B312B, 0x8FDCCD6A, 0xB5A6BC56, 0x1EAABBBD },
+        { 0x52FD0664, 0x1790F7A4, 0xF0733155, 0x1911CF98 },
+        { 0x0BA9BB6D, 0x84757607, 0x31D3CA51, 0x2F7971EC },
+        { 0x9CE8B0E7, 0x8B784743, 0x7B0B7616, 0x621AB98E },
+        { 0xA10BED74, 0x257E9B73, 0x14AD5122, 0x3BD420CE },
+        { 0x170AF810, 0x9C72BF53, 0xE779C945, 0x856370CB }
+    };
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(keys, 8, 14, w));
+    CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
+}
+
+void  AdvancedEncryptionStandardTest::testGenerateRoundKeys4()
+{
+    typedef     Testee::CryptRoundKeys  CryptRoundKeys;
+
+    Testee          aes;
+    CryptRoundKeys  w;
+
+    const   BtByte  keys[32] = {
+        0x00, 0x01, 0x02, 0x03,     0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0A, 0x0B,     0x0C, 0x0D, 0x0E, 0x0F,
+        0x10, 0x11, 0x12, 0x13,     0x14, 0x15, 0x16, 0x17,
+        0x18, 0x19, 0x1A, 0x1B,     0x1C, 0x1D, 0x1E, 0x1F
+    };
+
+    const   Testee::WordKey     expect[] = {
+        { 0x03020100, 0x07060504, 0x0B0A0908, 0x0F0E0D0C },
+        { 0x13121110, 0x17161514, 0x1B1A1918, 0x1F1E1D1C },
+        { 0x9FC273A5, 0x98C476A1, 0x93CE7FA9, 0x9CC072A5 },
+        { 0xCDA85116, 0xDABE4402, 0xC1A45D1A, 0xDEBA4006 },
+        { 0xF0DF87AE, 0x681BF10F, 0xFBD58EA6, 0x6715FC03 },
+        { 0x48F1E16D, 0x924FA56F, 0x53EBF875, 0x8D51B873 },
+        { 0x7F8256C6, 0x1799A7C9, 0xEC4C296F, 0x8B59D56C },
+        { 0x753AE23D, 0xE7754752, 0xB49EBF27, 0x39CF0754 },
+        { 0x5F90DC0B, 0x48097BC2, 0xA44552AD, 0x2F1C87C1 },
+        { 0x60A6F545, 0x87D3B217, 0x334D0D30, 0x0A820A64 },
+        { 0x1CF7CF7C, 0x54FEB4BE, 0xF0BBE613, 0xDFA761D2 },
+        { 0xFEFA1AF0, 0x7929A8E7, 0x4A64A5D7, 0x40E6AFB3 },
+        { 0x71FE4125, 0x2500F59B, 0xD5BB1388, 0x0A1C725A },
+        { 0x99665A4E, 0xE04FF2A9, 0xAA2B577E, 0xEACDF8CD },
+        { 0xCC79FC24, 0xE97909BF, 0x3CC21A37, 0x36DE686D }
+    };
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(keys, 8, 14, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 }
 
