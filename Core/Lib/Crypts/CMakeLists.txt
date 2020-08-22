@@ -33,6 +33,8 @@ Set (MODULE_NEEDS_LIBRARIES
 ##    ビルドとインストールの設定。
 ##
 
+Include (${COMMON_CMAKE_DIR}/BuildLibraryCommon.cmake)
+
 ##----------------------------------------------------------------
 ##
 ##    テストの設定。
