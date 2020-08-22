@@ -1,4 +1,6 @@
 
 /*  Linker Script.  */
+INPUT( AS_NEEDED(Crypts/libctCrypts.static.a) )
+
 INPUT( AS_NEEDED(-lctCommon) )
 
