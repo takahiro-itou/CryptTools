@@ -22,6 +22,7 @@
 #include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
 
 CRYPTTOOLS_NAMESPACE_BEGIN
+namespace  Crypts  {
 
 //========================================================================
 //
@@ -54,10 +55,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION( AdvancedEncryptionStandardTest );
 
 void  AdvancedEncryptionStandardTest::testAdvancedEncryptionStandard()
 {
-    AdvancedEncryptionStandardTest  aes;
+    AdvancedEncryptionStandard  aes;
     return;
 }
 
+}   //  End of namespace  Crypts
 CRYPTTOOLS_NAMESPACE_END
 
 //========================================================================
