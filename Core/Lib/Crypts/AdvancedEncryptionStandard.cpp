@@ -151,6 +151,34 @@ AdvancedEncryptionStandard::~AdvancedEncryptionStandard()
 //    Public Member Functions (Virtual Functions).
 //
 
+//----------------------------------------------------------------
+//    暗号文を復号する。
+//
+
+ErrCode
+AdvancedEncryptionStandard::decryptData(
+        const   LpcByte     baseKey,
+        const   CryptFlags  cryptFlag,
+        const   LpcByte     inData,
+        LpByte  const       outData)  const
+{
+    return ( ERR_FAILURE );
+}
+
+//----------------------------------------------------------------
+//    データを暗号化する。
+//
+
+ErrCode
+AdvancedEncryptionStandard::encryptData(
+        const   LpcByte     baseKey,
+        const   CryptFlags  cryptFlag,
+        const   LpcByte     inData,
+        LpByte  const       outData)  const
+{
+    return ( ERR_FAILURE );
+}
+
 //========================================================================
 //
 //    Public Member Functions.
@@ -235,6 +263,84 @@ AdvancedEncryptionStandard::readSBoxTable(
         const   BtByte  byteVal)
 {
     return ( g_tblSBox[byteVal] );
+}
+
+//----------------------------------------------------------------
+//    暗号化手順の AddRoundKey  ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runTestAddRoundKey(
+        const  WordKey  &  key,
+        TState          &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    復号手順の InvMixColumns  ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runTestInvMixColumns(
+        TState  &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    復号手順の InvShiftRows ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runTestInvShiftRows(
+        TState  &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    復号手順の InvSubBytes  ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runTestInvSubBytes(
+        TState  &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    暗号化手順の MixColumns ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runTestMixColumns(
+        TState  &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    暗号化手順の ShiftRows  ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runShiftRows(
+        TState  &  state)
+{
+}
+
+//----------------------------------------------------------------
+//    暗号化手順の SubBytes ステップを実行する
+//  （単体テスト用インターフェイス）。
+//
+
+void
+AdvancedEncryptionStandard::runSubBytes(
+        TState  &  state)
+{
 }
 
 }   //  End of namespace  Crypts

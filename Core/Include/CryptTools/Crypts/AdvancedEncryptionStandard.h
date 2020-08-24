@@ -43,6 +43,12 @@ class  AdvancedEncryptionStandard
 //
 public:
 
+    enum  CryptFlags  {
+        CRYPT_FLAGS_AES_128     = 0,
+        CRYPT_FLGAS_AES_192     = 1,
+        CRYPT_FLGAS_AES_256     = 2,
+    };
+
     enum  {
         NUM_WORDS_IN_ROUND_KEY  = 4
     };
@@ -50,6 +56,12 @@ public:
     typedef     std::array<BtWord, NUM_WORDS_IN_ROUND_KEY>  WordKey;
 
     typedef     std::vector<WordKey>    CryptRoundKeys;
+
+    union  TState
+    {
+        BtWord      w[4];
+        BtByte      s[16];
+    };
 
 //========================================================================
 //
@@ -90,6 +102,45 @@ public:
 //
 //    Public Member Functions (Virtual Functions).
 //
+public:
+
+    //----------------------------------------------------------------
+    /**   暗号文を復号する。
+    **
+    **  @param [in] cryptKey    暗号化鍵。
+    **  @param [in] cryptFlag   フラグ。
+    **  @param [in] inData      入力バッファ。
+    **  @param[out] outData     出力バッファ。
+    **  @return     エラーコードを返す。
+    **      -   異常終了の場合は、
+    **          エラーの種類を示す非ゼロ値を返す。
+    **      -   正常終了の場合は、ゼロを返す。
+    **/
+    virtual  ErrCode
+    decryptData(
+            const   LpcByte     baseKey,
+            const   CryptFlags  cryptFlag,
+            const   LpcByte     inData,
+            LpByte  const       outData)  const;
+
+    //----------------------------------------------------------------
+    /**   データを暗号化する。
+    **
+    **  @param [in] cryptKey    暗号化鍵。
+    **  @param [in] cryptFlag   フラグ。
+    **  @param [in] inData      入力バッファ。
+    **  @param[out] outData     出力バッファ。
+    **  @return     エラーコードを返す。
+    **      -   異常終了の場合は、
+    **          エラーの種類を示す非ゼロ値を返す。
+    **      -   正常終了の場合は、ゼロを返す。
+    **/
+    virtual  ErrCode
+    encryptData(
+            const   LpcByte     baseKey,
+            const   CryptFlags  cryptFlag,
+            const   LpcByte     inData,
+            LpByte  const       outData)  const;
 
 //========================================================================
 //
@@ -136,6 +187,85 @@ private:
     static  BtByte
     readSBoxTable(
             const   BtByte  byteVal);
+
+    //----------------------------------------------------------------
+    /**   暗号化手順の AddRoundKey  ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in]     key
+    **  @param [in,out] state,
+    **  @return     void.
+    **/
+    static  void
+    runTestAddRoundKey(
+            const  WordKey  &  key,
+            TState          &  state);
+
+    //----------------------------------------------------------------
+    /**   復号手順の InvMixColumns  ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runTestInvMixColumns(
+            TState  &  state);
+
+    //----------------------------------------------------------------
+    /**   復号手順の InvShiftRows ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runTestInvShiftRows(
+            TState  &  state);
+
+    //----------------------------------------------------------------
+    /**   復号手順の InvSubBytes  ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runTestInvSubBytes(
+            TState  &  state);
+
+    //----------------------------------------------------------------
+    /**   暗号化手順の MixColumns ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runTestMixColumns(
+            TState  &  state);
+
+    //----------------------------------------------------------------
+    /**   暗号化手順の ShiftRows  ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runShiftRows(
+            TState  &  state);
+
+    //----------------------------------------------------------------
+    /**   暗号化手順の SubBytes ステップを実行する
+    **  （単体テスト用インターフェイス）。
+    **
+    **  @param [in,out] state
+    **  @return     void.
+    **/
+    static  void
+    runSubBytes(
+            TState  &  state);
 
 //========================================================================
 //
