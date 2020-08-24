@@ -327,7 +327,7 @@ AdvancedEncryptionStandard::runTestMixColumns(
 //
 
 void
-AdvancedEncryptionStandard::runShiftRows(
+AdvancedEncryptionStandard::runTestShiftRows(
         TState  &  state)
 {
 }
@@ -338,7 +338,7 @@ AdvancedEncryptionStandard::runShiftRows(
 //
 
 void
-AdvancedEncryptionStandard::runSubBytes(
+AdvancedEncryptionStandard::runTestSubBytes(
         TState  &  state)
 {
 }

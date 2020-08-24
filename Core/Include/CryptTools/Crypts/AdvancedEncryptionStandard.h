@@ -253,7 +253,7 @@ private:
     **  @return     void.
     **/
     static  void
-    runShiftRows(
+    runTestShiftRows(
             TState  &  state);
 
     //----------------------------------------------------------------
@@ -264,7 +264,7 @@ private:
     **  @return     void.
     **/
     static  void
-    runSubBytes(
+    runTestSubBytes(
             TState  &  state);
 
 //========================================================================
