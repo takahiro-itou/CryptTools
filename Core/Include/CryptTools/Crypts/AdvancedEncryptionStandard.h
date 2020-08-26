@@ -45,8 +45,8 @@ public:
 
     enum  CryptFlags  {
         CRYPT_FLAGS_AES_128     = 0,
-        CRYPT_FLGAS_AES_192     = 1,
-        CRYPT_FLGAS_AES_256     = 2,
+        CRYPT_FLAGS_AES_192     = 1,
+        CRYPT_FLAGS_AES_256     = 2,
     };
 
     enum  {
