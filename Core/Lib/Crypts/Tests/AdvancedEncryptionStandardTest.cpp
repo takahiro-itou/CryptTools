@@ -159,6 +159,60 @@ AdvancedEncryptionStandardTest::runDecryptSteps(
             const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
             Testee::TState  & state)
 {
+    CryptRoundKeys  rKeys;
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(
+                    baseKey, KEYLEN, ROUNDS, rKeys)
+    );
+    CPPUNIT_ASSERT_EQUAL(
+            static_cast<size_t>(ROUNDS + 1), rKeys.size()
+    );
+
+    int     i = ROUNDS;
+
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    for ( int j = 0; j < KEYLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
+
+    for ( i = ROUNDS - 1; i >= 1; -- i ) {
+        Testee::runTestInvShiftRows(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
+
+        Testee::runTestInvSubBytes(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+        for ( int j = 0; j < KEYLEN; ++ j ) {
+            CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+        }
+
+        Testee::runTestAddRoundKey(rKeys[i], state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
+
+        Testee::runTestInvMixColumns(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
+    }
+
+    Testee::runTestInvShiftRows(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
+
+    Testee::runTestInvSubBytes(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    for ( int j = 0; j < KEYLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+    return;
 }
 
 template  <int ROUNDS, int KEYLEN, size_t STLEN>
@@ -180,6 +234,13 @@ AdvancedEncryptionStandardTest::runEncryptSteps(
     );
 
     int     i = 0;
+
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+    for ( int j = 0; j < KEYLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
     Testee::runTestAddRoundKey(rKeys[i], state);
     CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
 
@@ -207,9 +268,14 @@ AdvancedEncryptionStandardTest::runEncryptSteps(
     Testee::runTestShiftRows(state);
     CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
 
+    for ( int j = 0; j < KEYLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
     Testee::runTestAddRoundKey(rKeys[i], state);
     CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
 
+    return;
 }
 
 //========================================================================
@@ -498,40 +564,10 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps1()
         0x2B, 0x7E, 0x15, 0x16,     0x28, 0xAE, 0xD2, 0xA6,
         0xAB, 0xF7, 0x15, 0x88,     0x09, 0xCF, 0x4F, 0x3C
     };
-    const   BtWord  expect[11][4][4] = {
+    const   BtWord  expect[11][5][4] = {
     };
 
-    CPPUNIT_ASSERT_EQUAL(
-            ERR_SUCCESS,
-            Testee::generateRoundKeys(baseKey, 4, 10, rKeys));
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(11), rKeys.size());
-
-    int     i = 10;
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
-
-    for ( i = 10 - 1; i >= 1; -- i ) {
-        Testee::runTestInvShiftRows(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-        Testee::runTestInvSubBytes(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-        Testee::runTestAddRoundKey(rKeys[i], state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
-
-        Testee::runTestInvMixColumns(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
-    }
-
-    Testee::runTestInvShiftRows(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-    Testee::runTestInvSubBytes(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+    runDecryptSteps<10, 4>(baseKey, expect, state);
 
     return;
 }
@@ -548,7 +584,7 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps2()
         0x2B, 0x7E, 0x15, 0x16,     0x28, 0xAE, 0xD2, 0xA6,
         0xAB, 0xF7, 0x15, 0x88,     0x09, 0xCF, 0x4F, 0x3C
     };
-    const   BtWord  expect[11][4][4] = {
+    const   BtWord  expect[11][5][4] = {
         {
             { 0x33221100, 0x77665544, 0xBBAA9988, 0xFFEEDDCC },
             { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
@@ -607,37 +643,7 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps2()
         }
     };
 
-    CPPUNIT_ASSERT_EQUAL(
-            ERR_SUCCESS,
-            Testee::generateRoundKeys(baseKey, 4, 10, rKeys));
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(11), rKeys.size());
-
-    int     i = 10;
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
-
-    for ( i = 10 - 1; i >= 1; -- i ) {
-        Testee::runTestInvShiftRows(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-        Testee::runTestInvSubBytes(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-        Testee::runTestAddRoundKey(rKeys[i], state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
-
-        Testee::runTestInvMixColumns(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
-    }
-
-    Testee::runTestInvShiftRows(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-    Testee::runTestInvSubBytes(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+    runDecryptSteps<10, 4>(baseKey, expect, state);
 
     return;
 }
@@ -656,7 +662,7 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps3()
         0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00,     0x00, 0x00, 0x00, 0x00
     };
-    const   BtWord  expect[15][4][4] = {
+    const   BtWord  expect[15][5][4] = {
         {
             { 0x00000000, 0x00000000, 0x00000000, 0x00000000 },
             { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
@@ -735,37 +741,7 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps3()
         }
     };
 
-    CPPUNIT_ASSERT_EQUAL(
-            ERR_SUCCESS,
-            Testee::generateRoundKeys(baseKey, 8, 14, rKeys));
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(15), rKeys.size());
-
-    int     i = 14;
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
-
-    for ( i = 14 - 1; i >= 1; -- i ) {
-        Testee::runTestInvShiftRows(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-        Testee::runTestInvSubBytes(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-        Testee::runTestAddRoundKey(rKeys[i], state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
-
-        Testee::runTestInvMixColumns(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
-    }
-
-    Testee::runTestInvShiftRows(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-    Testee::runTestInvSubBytes(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+    runDecryptSteps<14, 8>(baseKey, expect, state);
 
     return;
 }
@@ -784,41 +760,10 @@ void  AdvancedEncryptionStandardTest::testRunDecryptSteps4()
         0x10, 0x11, 0x12, 0x13,     0x14, 0x15, 0x16, 0x17,
         0x18, 0x19, 0x1A, 0x1B,     0x1C, 0x1D, 0x1E, 0x1F
     };
-    const   BtWord  expect[15][4][4] = {
+    const   BtWord  expect[15][5][4] = {
     };
 
-    CPPUNIT_ASSERT_EQUAL(
-            ERR_SUCCESS,
-            Testee::generateRoundKeys(baseKey, 8, 14, rKeys));
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(15), rKeys.size());
-
-    int     i = 14;
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
-
-    for ( i = 14 - 1; i >= 1; -- i ) {
-        Testee::runTestInvShiftRows(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-        Testee::runTestInvSubBytes(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-        Testee::runTestAddRoundKey(rKeys[i], state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
-
-        Testee::runTestInvMixColumns(state);
-        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
-    }
-
-    Testee::runTestInvShiftRows(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
-
-    Testee::runTestInvSubBytes(state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][3], state.w));
-
-    Testee::runTestAddRoundKey(rKeys[i], state);
-    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+    runDecryptSteps<14, 8>(baseKey, expect, state);
 
     return;
 }
@@ -1031,7 +976,7 @@ void  AdvancedEncryptionStandardTest::testRunEncryptSteps3()
             { 0x15DBF4CC, 0xF3436DF1, 0x02CAFFE8, 0x6FFB8159 },
             { 0x6FCA6DCC, 0x15FBFFF1, 0xF3DB81E8, 0x0243F459 },
             { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
-            { 0x170AF810, 0x9C72BF53, 0xE779C945, 0x856370CB }
+            { 0x170AF810, 0x9C72BF53, 0xE779C945, 0x856370CB },
             { 0x78C095DC, 0x898940A2, 0x14A248AD, 0x87208492 }
         }
     };
