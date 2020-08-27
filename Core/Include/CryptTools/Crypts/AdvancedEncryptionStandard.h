@@ -44,9 +44,9 @@ class  AdvancedEncryptionStandard
 public:
 
     enum  CryptFlags  {
-        CRYPT_FLAGS_AES_128     = 0,
-        CRYPT_FLAGS_AES_192     = 1,
-        CRYPT_FLAGS_AES_256     = 2,
+        CRYPT_FLAGS_AES_128     = 4,
+        CRYPT_FLAGS_AES_192     = 6,
+        CRYPT_FLAGS_AES_256     = 8,
     };
 
     enum  {
