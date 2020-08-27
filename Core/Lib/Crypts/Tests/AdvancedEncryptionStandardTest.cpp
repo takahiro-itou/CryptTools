@@ -21,6 +21,7 @@
 #include    "TestDriver.h"
 #include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
 
+#include    <iostream>
 #include    <vector>
 
 CRYPTTOOLS_NAMESPACE_BEGIN
@@ -151,6 +152,13 @@ AdvancedEncryptionStandardTest::compareArray(
     int     counter = 0;
     for ( size_t i = 0; i < N; ++ i ) {
         if ( vExpect[i] != vActual[i] ) {
+            std::cerr   <<  "\nIndex = "    <<  std::dec
+                        <<  i               <<  std::hex
+                        <<  ", Expect: 0x"
+                        <<  static_cast<uint64_t>(vExpect[i])
+                        <<  ", Actual: 0x"
+                        <<  static_cast<uint64_t>(vActual[i])
+                        <<  std::endl;
             ++ counter;
         }
     }
@@ -360,7 +368,7 @@ const   BtWord  td1Expect[11][5][4] = {
         { 0x1EF240EB, 0x84382E59, 0xE713A18B, 0xD242C31B }
     }, {
         { 0x728909E9, 0x5F0731CB, 0x947D323D, 0xB52C2EAF },
-        { 0xB57D31E9, 0x722C32CB, 0x5F892E3D, 0x940709AD },
+        { 0xB57D31E9, 0x722C32CB, 0x5F892E3D, 0x940709AF },
         { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF },
         { 0xA8F914D0, 0x8925EEC9, 0xC80C3FE1, 0xA60C63B6 },
         { 0x1D842539, 0xFB09DC02, 0x978511DC, 0x320B6A19 }
@@ -1359,7 +1367,7 @@ void  AdvancedEncryptionStandardTest::testRunEncryptSteps3()
     Testee          aes;
 
     Testee::TState  state   = {
-        0xA8F64332, 0x8D305A88, 0xA2983131, 0x340737E0
+        0x00000000, 0x00000000, 0x00000000, 0x00000000
     };
 
     runEncryptSteps<14, 8>(td3BaseKey, td3Expect, state);
