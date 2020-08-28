@@ -86,11 +86,22 @@ CONSTEXPR_VAR   BtByte  g_tblInvSBox[256] = {
     0,
 };
 
+/**
+**    MixCol Conv テーブル。
+**/
+
+CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
+};
+
+//----------------------------------------------------------------
+
 inline  BtWord
 rotWord(const   BtWord  val)
 {
     return ( ((val & 0xFF) << 24) | ((val >> 8) & 0x00FFFFFF) );
 }
+
+//----------------------------------------------------------------
 
 inline  BtWord
 subWord(const   BtWord  val)
@@ -263,7 +274,6 @@ AdvancedEncryptionStandard::generateRoundKeys(
 
 //----------------------------------------------------------------
 //    テーブル Inv SBox の内容を参照する
-//  （単体テスト用インターフェイス）。
 //
 
 BtByte
@@ -274,8 +284,19 @@ AdvancedEncryptionStandard::readInvSBoxTable(
 }
 
 //----------------------------------------------------------------
+//    テーブル MixColConv の内容を参照する。
+//
+
+BtByte
+AdvancedEncryptionStandard::readMixColConvTable(
+        const   BtByte  idxByte,
+        const   BtByte  mulVal)
+{
+    return ( g_tblMixCol[idxByte][mulVal] );
+}
+
+//----------------------------------------------------------------
 //    テーブル SBox の内容を参照する
-//  （単体テスト用インターフェイス）。
 //
 
 BtByte
@@ -287,7 +308,6 @@ AdvancedEncryptionStandard::readSBoxTable(
 
 //----------------------------------------------------------------
 //    暗号化手順の AddRoundKey  ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -299,7 +319,6 @@ AdvancedEncryptionStandard::runTestAddRoundKey(
 
 //----------------------------------------------------------------
 //    復号手順の InvMixColumns  ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -310,7 +329,6 @@ AdvancedEncryptionStandard::runTestInvMixColumns(
 
 //----------------------------------------------------------------
 //    復号手順の InvShiftRows ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -321,7 +339,6 @@ AdvancedEncryptionStandard::runTestInvShiftRows(
 
 //----------------------------------------------------------------
 //    復号手順の InvSubBytes  ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -332,7 +349,6 @@ AdvancedEncryptionStandard::runTestInvSubBytes(
 
 //----------------------------------------------------------------
 //    暗号化手順の MixColumns ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -343,7 +359,6 @@ AdvancedEncryptionStandard::runTestMixColumns(
 
 //----------------------------------------------------------------
 //    暗号化手順の ShiftRows  ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
@@ -354,7 +369,6 @@ AdvancedEncryptionStandard::runTestShiftRows(
 
 //----------------------------------------------------------------
 //    暗号化手順の SubBytes ステップを実行する
-//  （単体テスト用インターフェイス）。
 //
 
 void
