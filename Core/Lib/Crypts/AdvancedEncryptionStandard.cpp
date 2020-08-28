@@ -78,6 +78,14 @@ CONSTEXPR_VAR   BtByte  g_tblSBox[256] = {
     0x41, 0x99, 0x2D, 0x0F,     0xB0, 0x54, 0xBB, 0x16
 };
 
+/**
+**    Inv S-Box テーブル。
+**/
+
+CONSTEXPR_VAR   BtByte  g_tblInvSBox[256] = {
+    0,
+};
+
 inline  BtWord
 rotWord(const   BtWord  val)
 {
@@ -251,6 +259,18 @@ AdvancedEncryptionStandard::generateRoundKeys(
     }
 
     return ( ERR_SUCCESS );
+}
+
+//----------------------------------------------------------------
+//    テーブル Inv SBox の内容を参照する
+//  （単体テスト用インターフェイス）。
+//
+
+BtByte
+AdvancedEncryptionStandard::readInvSBoxTable(
+        const   BtByte  byteVal)
+{
+    return ( g_tblInvSBox[byteVal] );
 }
 
 //----------------------------------------------------------------
