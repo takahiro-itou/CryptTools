@@ -46,6 +46,7 @@ class  AdvancedEncryptionStandardTest : public  TestFixture
     CPPUNIT_TEST(testGenerateRoundKeys3);
     CPPUNIT_TEST(testGenerateRoundKeys4);
     CPPUNIT_TEST(testGenerateRoundKeys5);
+    CPPUNIT_TEST(testReadInvSBoxTable);
     CPPUNIT_TEST(testReadSBoxTable);
     CPPUNIT_TEST(testRunDecryptSteps1);
     CPPUNIT_TEST(testRunDecryptSteps2);
@@ -106,6 +107,7 @@ private:
     void  testGenerateRoundKeys3();
     void  testGenerateRoundKeys4();
     void  testGenerateRoundKeys5();
+    void  testReadInvSBoxTable();
     void  testReadSBoxTable();
     void  testRunDecryptSteps1();
     void  testRunDecryptSteps2();
@@ -1246,6 +1248,48 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys5()
     return;
 }
 
+
+void  AdvancedEncryptionStandardTest::testReadInvSBoxTable()
+{
+    BtWord  tableInvs[256] = {};
+
+    generatePolyInvTable(tableInvs);
+
+    for ( int i = 0; i <= 255; ++ i ) {
+        const   BtByte  val     = static_cast<BtByte>(i);
+        const   int     actual  = Testee::readInvSBoxTable(val);
+
+        const  int  b7  = (val >> 7) & 0x01;
+        const  int  b6  = (val >> 6) & 0x01;
+        const  int  b5  = (val >> 5) & 0x01;
+        const  int  b4  = (val >> 4) & 0x01;
+        const  int  b3  = (val >> 3) & 0x01;
+        const  int  b2  = (val >> 2) & 0x01;
+        const  int  b1  = (val >> 1) & 0x01;
+        const  int  b0  = (val     ) & 0x01;
+
+        const  int  c7  = (b6 ^ b4 ^ b1) ^ 0;
+        const  int  c6  = (b5 ^ b3 ^ b0) ^ 0;
+        const  int  c5  = (b4 ^ b2 ^ b7) ^ 0;
+        const  int  c4  = (b3 ^ b1 ^ b6) ^ 0;
+        const  int  c3  = (b2 ^ b0 ^ b5) ^ 0;
+        const  int  c2  = (b1 ^ b7 ^ b4) ^ 1;
+        const  int  c1  = (b0 ^ b6 ^ b3) ^ 0;
+        const  int  c0  = (b7 ^ b5 ^ b2) ^ 1;
+
+        const  BtByte  tmp  = (c0 & 1)
+            | ((c1 & 1) << 1)
+            | ((c2 & 1) << 2)
+            | ((c3 & 1) << 3)
+            | ((c4 & 1) << 4)
+            | ((c5 & 1) << 5)
+            | ((c6 & 1) << 6)
+            | ((c7 & 1) << 7);
+        const  int  expect  = tableInvs[tmp];
+        CPPUNIT_ASSERT_EQUAL(expect, actual);
+    }
+}
+
 void  AdvancedEncryptionStandardTest::testReadSBoxTable()
 {
     BtWord  tableInvs[256] = {};
@@ -1259,14 +1303,14 @@ void  AdvancedEncryptionStandardTest::testReadSBoxTable()
         BtByte  tmp = val;
         tmp = tableInvs[tmp];
 
-        const  int  b0  = (tmp     ) & 0x01;
-        const  int  b1  = (tmp >> 1) & 0x01;
-        const  int  b2  = (tmp >> 2) & 0x01;
-        const  int  b3  = (tmp >> 3) & 0x01;
-        const  int  b4  = (tmp >> 4) & 0x01;
-        const  int  b5  = (tmp >> 5) & 0x01;
-        const  int  b6  = (tmp >> 6) & 0x01;
         const  int  b7  = (tmp >> 7) & 0x01;
+        const  int  b6  = (tmp >> 6) & 0x01;
+        const  int  b5  = (tmp >> 5) & 0x01;
+        const  int  b4  = (tmp >> 4) & 0x01;
+        const  int  b3  = (tmp >> 3) & 0x01;
+        const  int  b2  = (tmp >> 2) & 0x01;
+        const  int  b1  = (tmp >> 1) & 0x01;
+        const  int  b0  = (tmp     ) & 0x01;
 
         const  int  c7  = (b7 ^ b6 ^ b5 ^ b4 ^ b3) ^ 0;
         const  int  c6  = (b6 ^ b5 ^ b4 ^ b3 ^ b2) ^ 1;
