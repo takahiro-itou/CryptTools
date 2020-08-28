@@ -47,6 +47,7 @@ class  AdvancedEncryptionStandardTest : public  TestFixture
     CPPUNIT_TEST(testGenerateRoundKeys4);
     CPPUNIT_TEST(testGenerateRoundKeys5);
     CPPUNIT_TEST(testReadInvSBoxTable);
+    CPPUNIT_TEST(testReadMixColConvTable);
     CPPUNIT_TEST(testReadSBoxTable);
     CPPUNIT_TEST(testRunDecryptSteps1);
     CPPUNIT_TEST(testRunDecryptSteps2);
@@ -108,6 +109,7 @@ private:
     void  testGenerateRoundKeys4();
     void  testGenerateRoundKeys5();
     void  testReadInvSBoxTable();
+    void  testReadMixColConvTable();
     void  testReadSBoxTable();
     void  testRunDecryptSteps1();
     void  testRunDecryptSteps2();
@@ -1248,7 +1250,6 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys5()
     return;
 }
 
-
 void  AdvancedEncryptionStandardTest::testReadInvSBoxTable()
 {
     BtWord  tableInvs[256] = {};
@@ -1288,6 +1289,38 @@ void  AdvancedEncryptionStandardTest::testReadInvSBoxTable()
         const  int  expect  = tableInvs[tmp];
         CPPUNIT_ASSERT_EQUAL(expect, actual);
     }
+}
+
+void  AdvancedEncryptionStandardTest::testReadMixColConvTable()
+{
+    for ( int i = 0; i < 255; ++ i ) {
+        const   BtByte  y1  = static_cast<BtByte>(i);
+        const   BtWord  y2  = Testee::readMixColConvTable(y1, 0);
+        const   BtWord  y3  = Testee::readMixColConvTable(y1, 1);
+        const   BtWord  yE  = Testee::readMixColConvTable(y1, 2);
+        const   BtWord  y9  = Testee::readMixColConvTable(y1, 3);
+        const   BtWord  yD  = Testee::readMixColConvTable(y1, 4);
+        const   BtWord  yB  = Testee::readMixColConvTable(y1, 5);
+
+        const   BtWord  x2  = (y1 << 1) ^ (y1 & 0x80 ? 0x11B : 0x00);
+        const   BtWord  x4  = (x2 << 1) ^ (x2 & 0x80 ? 0x11B : 0x00);
+        const   BtWord  x8  = (x4 << 1) ^ (x4 & 0x80 ? 0x11B : 0x00);
+
+        const   BtWord  x3  = (x2 ^ y1)      & 0xFF;
+        const   BtWord  xE  = (x8 ^ x4 ^ x2) & 0xFF;
+        const   BtWord  x9  = (x8 ^ y1)      & 0xFF;
+        const   BtWord  xD  = (x8 ^ x4 ^ y1) & 0xFF;
+        const   BtWord  xB  = (x8 ^ x2 ^ y1) & 0xFF;
+
+        CPPUNIT_ASSERT_EQUAL(x2, y2);
+        CPPUNIT_ASSERT_EQUAL(x3, y3);
+        CPPUNIT_ASSERT_EQUAL(xE, yE);
+        CPPUNIT_ASSERT_EQUAL(x9, y9);
+        CPPUNIT_ASSERT_EQUAL(xD, yD);
+        CPPUNIT_ASSERT_EQUAL(xB, yB);
+    }
+
+    return;
 }
 
 void  AdvancedEncryptionStandardTest::testReadSBoxTable()
