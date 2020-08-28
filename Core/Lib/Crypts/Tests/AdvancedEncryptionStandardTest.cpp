@@ -79,6 +79,10 @@ private:
             const   T   (&vExpect)[N],
             const   T   (&vActual)[N]);
 
+    static  void
+    generatePolyInvTable(
+            BtWord  (& tableInvs) [256]);
+
     template  <int ROUNDS, int KEYLEN, size_t STLEN=4>
     inline  void
     runDecryptSteps(
@@ -164,6 +168,41 @@ AdvancedEncryptionStandardTest::compareArray(
     }
 
     return ( counter );
+}
+
+void
+AdvancedEncryptionStandardTest::generatePolyInvTable(
+        BtWord  (& tableInvs) [256])
+{
+    BtWord  tablePows[6][52] = {};
+    BtWord  tmpPoly[6] = {
+        0x00000001, 0x00000001,
+        0x00000003, 0x000000f6,
+        0x00000005, 0x00000052
+    };
+
+    for ( int idx = 0; idx < 256; ++ idx ) {
+        tableInvs[idx]  = 0;
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        BtWord  curPoly = tmpPoly[j];
+        for ( int i = 0; i < 52; ++ i ) {
+            tablePows[j][i] = (curPoly & 0xFF);
+            curPoly <<= 1;
+            if ( curPoly & 0x00000100 ) {
+                curPoly ^= 0x0000011B;
+            }
+        }
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        for ( int i = 0; i < 52; ++ i ) {
+            BtByte  src = tablePows[j][i];
+            BtByte  trg = tablePows[j ^ 1][51 - i];
+            tableInvs[src]  = trg;
+        }
+    }
+
+    return;
 }
 
 template  <int ROUNDS, int KEYLEN, size_t STLEN>
@@ -1210,33 +1249,8 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys5()
 void  AdvancedEncryptionStandardTest::testReadSBoxTable()
 {
     BtWord  tableInvs[256] = {};
-    BtWord  tablePows[6][52] = {};
-    BtWord  tmpPoly[6] = {
-        0x00000001, 0x00000001,
-        0x00000003, 0x000000f6,
-        0x00000005, 0x00000052
-    };
 
-    for ( int idx = 0; idx < 256; ++ idx ) {
-        tableInvs[idx]  = 0;
-    }
-    for ( int j = 0; j < 6; ++ j ) {
-        BtWord  curPoly = tmpPoly[j];
-        for ( int i = 0; i < 52; ++ i ) {
-            tablePows[j][i] = (curPoly & 0xFF);
-            curPoly <<= 1;
-            if ( curPoly & 0x00000100 ) {
-                curPoly ^= 0x0000011B;
-            }
-        }
-    }
-    for ( int j = 0; j < 6; ++ j ) {
-        for ( int i = 0; i < 52; ++ i ) {
-            BtByte  src = tablePows[j][i];
-            BtByte  trg = tablePows[j ^ 1][51 - i];
-            tableInvs[src]  = trg;
-        }
-    }
+    generatePolyInvTable(tableInvs);
 
     for ( int i = 0; i <= 255; ++ i ) {
         const   BtByte  val     = static_cast<BtByte>(i);
