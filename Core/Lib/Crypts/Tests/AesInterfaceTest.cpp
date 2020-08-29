@@ -36,8 +36,16 @@ class  AesInterfaceTest : public  AdvancedEncryptionStandardTest
 {
     CPPUNIT_TEST_SUITE(AesInterfaceTest);
     CPPUNIT_TEST(testAdvancedEncryptionStandard);
-    CPPUNIT_TEST(testDecryptData);
-    CPPUNIT_TEST(testEncryptData);
+    CPPUNIT_TEST(testDecryptData01);
+    CPPUNIT_TEST(testDecryptData02);
+    CPPUNIT_TEST(testDecryptData03);
+    CPPUNIT_TEST(testDecryptData04);
+    CPPUNIT_TEST(testDecryptData05);
+    CPPUNIT_TEST(testEncryptData01);
+    CPPUNIT_TEST(testEncryptData02);
+    CPPUNIT_TEST(testEncryptData03);
+    CPPUNIT_TEST(testEncryptData04);
+    CPPUNIT_TEST(testEncryptData05);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -48,8 +56,16 @@ public:
 private:
 
     void  testAdvancedEncryptionStandard();
-    void  testDecryptData();
-    void  testEncryptData();
+    void  testDecryptData01();
+    void  testDecryptData02();
+    void  testDecryptData03();
+    void  testDecryptData04();
+    void  testDecryptData05();
+    void  testEncryptData01();
+    void  testEncryptData02();
+    void  testEncryptData03();
+    void  testEncryptData04();
+    void  testEncryptData05();
 
 };
 
@@ -67,7 +83,7 @@ void  AesInterfaceTest::testAdvancedEncryptionStandard()
     return;
 }
 
-void  AesInterfaceTest::testDecryptData()
+void  AesInterfaceTest::testDecryptData01()
 {
     Testee  aes;
 
@@ -96,6 +112,15 @@ void  AesInterfaceTest::testDecryptData()
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target1, actual));
     }
 
+    return;
+}
+
+void  AesInterfaceTest::testDecryptData02()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
+
     //  Test Data # 2.  //
     {
         const   BtByte  ckeys2[16]  = {
@@ -118,6 +143,15 @@ void  AesInterfaceTest::testDecryptData()
                 ERR_SUCCESS);
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target2, actual));
     }
+
+    return;
+}
+
+void  AesInterfaceTest::testDecryptData03()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
 
     //  Test Data # 3.  //
     {
@@ -144,6 +178,15 @@ void  AesInterfaceTest::testDecryptData()
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target3, actual));
     }
 
+    return;
+}
+
+void  AesInterfaceTest::testDecryptData04()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
+
     //  Test Data # 4.  //
     {
         const   BtByte  ckeys4[32]  = {
@@ -168,6 +211,15 @@ void  AesInterfaceTest::testDecryptData()
                 ERR_SUCCESS);
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target4, actual));
     }
+
+    return;
+}
+
+void  AesInterfaceTest::testDecryptData05()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
 
     //  Test Data # 5.  //
     {
@@ -196,7 +248,7 @@ void  AesInterfaceTest::testDecryptData()
     return;
 }
 
-void  AesInterfaceTest::testEncryptData()
+void  AesInterfaceTest::testEncryptData01()
 {
     Testee  aes;
 
@@ -225,6 +277,15 @@ void  AesInterfaceTest::testEncryptData()
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target1, actual));
     }
 
+    return;
+}
+
+void  AesInterfaceTest::testEncryptData02()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
+
     //  Test Data # 2.  //
     {
         const   BtByte  ckeys2[16]  = {
@@ -247,6 +308,15 @@ void  AesInterfaceTest::testEncryptData()
                 ERR_SUCCESS);
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target2, actual));
     }
+
+    return;
+}
+
+void  AesInterfaceTest::testEncryptData03()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
 
     //  Test Data # 3.  //
     {
@@ -273,6 +343,15 @@ void  AesInterfaceTest::testEncryptData()
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target3, actual));
     }
 
+    return;
+}
+
+void  AesInterfaceTest::testEncryptData04()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
+
     //  Test Data # 4.  //
     {
         const   BtByte  ckeys4[32]  = {
@@ -297,6 +376,15 @@ void  AesInterfaceTest::testEncryptData()
                 ERR_SUCCESS);
         CPPUNIT_ASSERT_EQUAL(0, compareArray(target4, actual));
     }
+
+    return;
+}
+
+void  AesInterfaceTest::testEncryptData05()
+{
+    Testee  aes;
+
+    BtByte  actual[16];
 
     //  Test Data # 5.  //
     {
