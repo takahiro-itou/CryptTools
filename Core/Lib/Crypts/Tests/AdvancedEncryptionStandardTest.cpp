@@ -21,7 +21,6 @@
 #include    "TestDriver.h"
 #include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
 
-#include    <iostream>
 #include    <vector>
 
 CRYPTTOOLS_NAMESPACE_BEGIN
@@ -74,12 +73,6 @@ private:
     checkRoundKeys(
             const  Testee::WordKey  (&vExpect)[N],
             const  CryptRoundKeys   & vActual);
-
-    template  <typename  T,  size_t  N>
-    static  const   int
-    compareArray(
-            const   T   (&vExpect)[N],
-            const   T   (&vActual)[N]);
 
     static  void
     generatePolyInvTable(
@@ -145,29 +138,6 @@ AdvancedEncryptionStandardTest::checkRoundKeys(
             if ( vExpect[i][j] != vActual[i][j] ) {
                 ++ counter;
             }
-        }
-    }
-
-    return ( counter );
-}
-
-template  <typename  T,  size_t  N>
-const   int
-AdvancedEncryptionStandardTest::compareArray(
-        const   T   (&vExpect)[N],
-        const   T   (&vActual)[N])
-{
-    int     counter = 0;
-    for ( size_t i = 0; i < N; ++ i ) {
-        if ( vExpect[i] != vActual[i] ) {
-            std::cerr   <<  "\nIndex = "    <<  std::dec
-                        <<  i               <<  std::hex
-                        <<  ", Expect: 0x"
-                        <<  static_cast<uint64_t>(vExpect[i])
-                        <<  ", Actual: 0x"
-                        <<  static_cast<uint64_t>(vActual[i])
-                        <<  std::endl;
-            ++ counter;
         }
     }
 
