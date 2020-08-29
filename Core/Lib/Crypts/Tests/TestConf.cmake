@@ -12,6 +12,10 @@ Add_Test (NAME  AesInterfaceTest
     COMMAND  $<TARGET_FILE:AesInterfaceTest>
 )
 
+Add_Test (NAME  AesTableDataTest
+    COMMAND  $<TARGET_FILE:AesTableDataTest>
+)
+
 ##----------------------------------------------------------------
 ##
 ##    テストプログラムのビルド。
@@ -25,5 +29,10 @@ Add_Executable (
 Add_Executable (
     AesInterfaceTest
     AesInterfaceTest.cpp
+)
+
+Add_Executable (
+    AesTableDataTest
+    AesTableDataTest.cpp
 )
 
