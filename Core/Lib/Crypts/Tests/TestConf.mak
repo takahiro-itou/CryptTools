@@ -7,6 +7,11 @@ EXTRATESTS              =
 TESTS                   =  \
         AdvancedEncryptionStandardTest  \
         AesInterfaceTest                \
+        AesSteps01Test                  \
+        AesSteps02Test                  \
+        AesSteps03Test                  \
+        AesSteps04Test                  \
+        AesSteps05Test                  \
         AesTableDataTest                \
         ${EXTRATESTS}
 ##
@@ -37,5 +42,10 @@ AdvancedEncryptionStandardTest_SOURCES  =  \
         AdvancedEncryptionStandardTest.cpp
 
 AesInterfaceTest_SOURCES    =  AesInterfaceTest.cpp
+AesSteps01Test_SOURCES      =  AesSteps01Test.cpp
+AesSteps02Test_SOURCES      =  AesSteps02Test.cpp
+AesSteps03Test_SOURCES      =  AesSteps03Test.cpp
+AesSteps04Test_SOURCES      =  AesSteps04Test.cpp
+AesSteps05Test_SOURCES      =  AesSteps05Test.cpp
 AesTableDataTest_SOURCES    =  AesTableDataTest.cpp
 
