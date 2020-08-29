@@ -95,6 +95,16 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 
 //----------------------------------------------------------------
 
+#define     ADD_ROUND_KEY(key, state)
+#define     INV_MIX_COLUMN(state)
+#define     INV_SUB_BYTES(state)
+#define     INV_SHIFT_ROWS(state)
+#define     MIX_COLUMN(state)
+#define     SUB_BYTES(state)
+#define     SHIFT_ROWS(state)
+
+//----------------------------------------------------------------
+
 inline  BtWord
 rotWord(const   BtWord  val)
 {
@@ -195,7 +205,26 @@ AdvancedEncryptionStandard::encryptData(
         const   LpcByte     inData,
         LpByte  const       outData)  const
 {
-    return ( ERR_FAILURE );
+    const  int  keyLen      = static_cast<int>(cryptFlag);
+    const  int  numRounds   = keyLen + 6;
+    CryptRoundKeys  rKeys;
+
+    generateRoundKeys(baseKey, keyLen, numRounds, rKeys);
+
+    ADD_ROUND_KEY(rKeys[i], state);
+
+    for ( int curRound = 1; curRound < numRounds; ++ curRound ) {
+        SUB_BYTES(state);
+        SHIFT_ROWS(state);
+        MIX_COLUMN(state);
+        ADD_ROUND_KEY(rKeys[i], state);
+    }
+
+    SUB_BYTES(state);
+    SHIFT_ROWS(state);
+    ADD_ROUND_KEY(rKeys[numRounds], state);
+
+    return ( ERR_SUCCESS );
 }
 
 //========================================================================
@@ -315,6 +344,7 @@ AdvancedEncryptionStandard::runTestAddRoundKey(
         const  WordKey  &  key,
         TState          &  state)
 {
+    ADD_ROUND_KEY(key, state);
 }
 
 //----------------------------------------------------------------
@@ -325,6 +355,7 @@ void
 AdvancedEncryptionStandard::runTestInvMixColumns(
         TState  &  state)
 {
+    INV_MIX_COLUMN(state);
 }
 
 //----------------------------------------------------------------
@@ -335,6 +366,7 @@ void
 AdvancedEncryptionStandard::runTestInvShiftRows(
         TState  &  state)
 {
+    INV_SHIFT_ROWS(state);
 }
 
 //----------------------------------------------------------------
@@ -345,6 +377,7 @@ void
 AdvancedEncryptionStandard::runTestInvSubBytes(
         TState  &  state)
 {
+    INV_SUB_BYTES(state);
 }
 
 //----------------------------------------------------------------
@@ -355,6 +388,7 @@ void
 AdvancedEncryptionStandard::runTestMixColumns(
         TState  &  state)
 {
+    MIX_COLUMN(state);
 }
 
 //----------------------------------------------------------------
@@ -365,6 +399,7 @@ void
 AdvancedEncryptionStandard::runTestShiftRows(
         TState  &  state)
 {
+    SHIFT_ROWS(state);
 }
 
 //----------------------------------------------------------------
@@ -375,6 +410,7 @@ void
 AdvancedEncryptionStandard::runTestSubBytes(
         TState  &  state)
 {
+    SUB_BYTES(state);
 }
 
 }   //  End of namespace  Crypts
