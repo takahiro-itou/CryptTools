@@ -38,27 +38,6 @@ namespace  Crypts  {
 class  AdvancedEncryptionStandardTest : public  TestFixture
 {
     CPPUNIT_TEST_SUITE(AdvancedEncryptionStandardTest);
-    CPPUNIT_TEST(testAdvancedEncryptionStandard);
-    CPPUNIT_TEST(testDecryptData);
-    CPPUNIT_TEST(testEncryptData);
-    CPPUNIT_TEST(testGenerateRoundKeys1);
-    CPPUNIT_TEST(testGenerateRoundKeys2);
-    CPPUNIT_TEST(testGenerateRoundKeys3);
-    CPPUNIT_TEST(testGenerateRoundKeys4);
-    CPPUNIT_TEST(testGenerateRoundKeys5);
-    CPPUNIT_TEST(testReadInvSBoxTable);
-    CPPUNIT_TEST(testReadMixColConvTable);
-    CPPUNIT_TEST(testReadSBoxTable);
-    CPPUNIT_TEST(testRunDecryptSteps1);
-    CPPUNIT_TEST(testRunDecryptSteps2);
-    CPPUNIT_TEST(testRunDecryptSteps3);
-    CPPUNIT_TEST(testRunDecryptSteps4);
-    CPPUNIT_TEST(testRunDecryptSteps5);
-    CPPUNIT_TEST(testRunEncryptSteps1);
-    CPPUNIT_TEST(testRunEncryptSteps2);
-    CPPUNIT_TEST(testRunEncryptSteps3);
-    CPPUNIT_TEST(testRunEncryptSteps4);
-    CPPUNIT_TEST(testRunEncryptSteps5);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -70,12 +49,12 @@ protected:
     typedef     Testee::CryptRoundKeys          CryptRoundKeys;
 
     template  <size_t  N>
-    static  const   int
+    static  inline  const   int
     checkRoundKeys(
             const  Testee::WordKey  (&vExpect)[N],
             const  CryptRoundKeys   & vActual);
 
-    static  void
+    static  inline  void
     generatePolyInvTable(
             BtWord  (& tableInvs) [256]);
 
@@ -146,28 +125,6 @@ protected:
     readSBoxTable(
             const   BtByte  byteVal);
 
-private:
-    void  testAdvancedEncryptionStandard();
-    void  testDecryptData();
-    void  testEncryptData();
-    void  testGenerateRoundKeys1();
-    void  testGenerateRoundKeys2();
-    void  testGenerateRoundKeys3();
-    void  testGenerateRoundKeys4();
-    void  testGenerateRoundKeys5();
-    void  testReadInvSBoxTable();
-    void  testReadMixColConvTable();
-    void  testReadSBoxTable();
-    void  testRunDecryptSteps1();
-    void  testRunDecryptSteps2();
-    void  testRunDecryptSteps3();
-    void  testRunDecryptSteps4();
-    void  testRunDecryptSteps5();
-    void  testRunEncryptSteps1();
-    void  testRunEncryptSteps2();
-    void  testRunEncryptSteps3();
-    void  testRunEncryptSteps4();
-    void  testRunEncryptSteps5();
 };
 
 //========================================================================
@@ -194,6 +151,41 @@ AdvancedEncryptionStandardTest::checkRoundKeys(
     }
 
     return ( counter );
+}
+
+inline  void
+AdvancedEncryptionStandardTest::generatePolyInvTable(
+        BtWord  (& tableInvs) [256])
+{
+    BtWord  tablePows[6][52] = {};
+    BtWord  tmpPoly[6] = {
+        0x00000001, 0x00000001,
+        0x00000003, 0x000000f6,
+        0x00000005, 0x00000052
+    };
+
+    for ( int idx = 0; idx < 256; ++ idx ) {
+        tableInvs[idx]  = 0;
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        BtWord  curPoly = tmpPoly[j];
+        for ( int i = 0; i < 52; ++ i ) {
+            tablePows[j][i] = (curPoly & 0xFF);
+            curPoly <<= 1;
+            if ( curPoly & 0x00000100 ) {
+                curPoly ^= 0x0000011B;
+            }
+        }
+    }
+    for ( int j = 0; j < 6; ++ j ) {
+        for ( int i = 0; i < 52; ++ i ) {
+            BtByte  src = tablePows[j][i];
+            BtByte  trg = tablePows[j ^ 1][51 - i];
+            tableInvs[src]  = trg;
+        }
+    }
+
+    return;
 }
 
 template  <int ROUNDS, int KEYLEN, size_t STLEN>
