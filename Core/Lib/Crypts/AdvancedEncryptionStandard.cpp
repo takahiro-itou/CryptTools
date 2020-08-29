@@ -191,7 +191,24 @@ AdvancedEncryptionStandard::decryptData(
         const   LpcByte     inData,
         LpByte  const       outData)  const
 {
-    return ( ERR_FAILURE );
+    const  int  keyLen      = static_cast<int>(cryptFlag);
+    const  int  numRounds   = keyLen + 6;
+    CryptRoundKeys  rKeys;
+
+    ADD_ROUND_KEY(rKeys[numRounds], state);
+
+    for ( int i = numRounds - 1; i >= 1; -- i ) {
+        INV_SHIFT_ROWS(state);
+        INV_SUB_BYTES(state);
+        ADD_ROUND_KEY(rKeys[i], state);
+        INV_MIX_COLUMN(state);
+    }
+
+    INV_SHIFT_ROWS(state);
+    INV_SUB_BYTES(state);
+    ADD_ROUND_KEY(rKeys[0], state);
+
+    return ( ERR_SUCCESS );
 }
 
 //----------------------------------------------------------------
