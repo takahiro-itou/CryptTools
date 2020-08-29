@@ -65,7 +65,7 @@ public:
     virtual  void   setUp()     override    { }
     virtual  void   tearDown()  override    { }
 
-private:
+protected:
     typedef     AdvancedEncryptionStandard      Testee;
     typedef     Testee::CryptRoundKeys          CryptRoundKeys;
 
@@ -80,14 +80,14 @@ private:
             BtWord  (& tableInvs) [256]);
 
     template  <int ROUNDS, int KEYLEN, size_t STLEN=4>
-    inline  void
+    static  inline  void
     runDecryptSteps(
             const   BtByte  (&baseKey)[KEYLEN * 4],
             const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
             Testee::TState  & state);
 
     template  <int ROUNDS, int KEYLEN, size_t STLEN=4>
-    inline  void
+    static  inline  void
     runEncryptSteps(
             const   BtByte  (&baseKey)[KEYLEN * 4],
             const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
@@ -116,6 +116,158 @@ private:
     void  testRunEncryptSteps4();
     void  testRunEncryptSteps5();
 };
+
+//========================================================================
+//
+//    Helper Functions.
+//
+
+template <size_t  N>
+const   int
+AdvancedEncryptionStandardTest::checkRoundKeys(
+        const  Testee::WordKey  (&vExpect)[N],
+        const  CryptRoundKeys   & vActual)
+{
+    int     counter = 0;
+
+    CPPUNIT_ASSERT_EQUAL(vActual.size(), N);
+
+    for ( size_t i = 0; i < N; ++ i ) {
+        for ( int j = 0; j < Testee::NUM_WORDS_IN_ROUND_KEY; ++ j ){
+            if ( vExpect[i][j] != vActual[i][j] ) {
+                ++ counter;
+            }
+        }
+    }
+
+    return ( counter );
+}
+
+template  <int ROUNDS, int KEYLEN, size_t STLEN>
+inline  void
+AdvancedEncryptionStandardTest::runDecryptSteps(
+            const   BtByte  (&baseKey)[KEYLEN * 4],
+            const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
+            Testee::TState  & state)
+{
+    CryptRoundKeys  rKeys;
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(
+                    baseKey, KEYLEN, ROUNDS, rKeys)
+    );
+    CPPUNIT_ASSERT_EQUAL(
+            static_cast<size_t>(ROUNDS + 1), rKeys.size()
+    );
+
+    int     i = ROUNDS;
+
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    for ( size_t j = 0; j < STLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
+
+    for ( i = ROUNDS - 1; i >= 1; -- i ) {
+        Testee::runTestInvShiftRows(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
+
+        Testee::runTestInvSubBytes(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+        for ( size_t j = 0; j < STLEN; ++ j ) {
+            CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+        }
+
+        Testee::runTestAddRoundKey(rKeys[i], state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w));
+
+        Testee::runTestInvMixColumns(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w) );
+    }
+
+    Testee::runTestInvShiftRows(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i + 1][0], state.w));
+
+    Testee::runTestInvSubBytes(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    for ( size_t j = 0; j < STLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+    return;
+}
+
+template  <int ROUNDS, int KEYLEN, size_t STLEN>
+inline  void
+AdvancedEncryptionStandardTest::runEncryptSteps(
+        const   BtByte  (&baseKey)[KEYLEN * 4],
+        const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
+        Testee::TState  & state)
+{
+    CryptRoundKeys  rKeys;
+
+    CPPUNIT_ASSERT_EQUAL(
+            ERR_SUCCESS,
+            Testee::generateRoundKeys(
+                    baseKey, KEYLEN, ROUNDS, rKeys)
+    );
+    CPPUNIT_ASSERT_EQUAL(
+            static_cast<size_t>(ROUNDS + 1), rKeys.size()
+    );
+
+    int     i = 0;
+
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+    for ( size_t j = 0; j < STLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    for ( i = 1; i < ROUNDS; ++ i ) {
+        Testee::runTestSubBytes(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+        Testee::runTestShiftRows(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
+
+        Testee::runTestMixColumns(state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][2], state.w) );
+
+        for ( size_t j = 0; j < STLEN; ++ j ) {
+            CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+        }
+
+        Testee::runTestAddRoundKey(rKeys[i], state);
+        CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+    }
+
+    Testee::runTestSubBytes(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][0], state.w));
+
+    Testee::runTestShiftRows(state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][1], state.w));
+
+    for ( size_t j = 0; j < STLEN; ++ j ) {
+        CPPUNIT_ASSERT_EQUAL(expect[i][3][j], rKeys[i][j]);
+    }
+
+    Testee::runTestAddRoundKey(rKeys[i], state);
+    CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
+
+    return;
+}
 
 }   //  End of namespace  Crypts
 CRYPTTOOLS_NAMESPACE_END
