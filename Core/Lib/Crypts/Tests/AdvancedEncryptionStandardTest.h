@@ -93,6 +93,59 @@ protected:
             const   BtWord  (&expect)[ROUNDS+1][5][STLEN],
             Testee::TState  & state);
 
+protected:
+
+    //----------------------------------------------------------------
+    /**   各ラウンド用のキーを生成する。
+    **
+    **  @param [in] baseKey     暗号化鍵。
+    **  @param [in] keySize     キーサイズ（ワード単位）。
+    **  @param [in] numRounds   ラウンド数。
+    **  @param[out] outKeys     生成されたラウンド用キー。
+    **  @return     エラーコードを返す。
+    **      -   異常終了の場合は、
+    **          エラーの種類を示す非ゼロ値を返す。
+    **      -   正常終了の場合は、ゼロを返す。
+    **/
+    static  inline  ErrCode
+    generateRoundKeys(
+            const   LpcByte     baseKey,
+            const   int         keySize,
+            const   int         numRounds,
+            CryptRoundKeys    & outKeys);
+
+    //----------------------------------------------------------------
+    /**   テーブル Inv SBox の内容を参照する
+    **
+    **  @param [in] byteVal
+    **  @return
+    **/
+    static  inline  BtByte
+    readInvSBoxTable(
+            const   BtByte  byteVal);
+
+    //----------------------------------------------------------------
+    /**   テーブル MixColConv の内容を参照する。
+    **
+    **  @param [in] idxByte,
+    **  @param [in] mulVal
+    **  @return
+    **/
+    static  BtByte
+    readMixColConvTable(
+            const   BtByte  idxByte,
+            const   BtByte  mulVal);
+
+    //----------------------------------------------------------------
+    /**   テーブル SBox の内容を参照する
+    **
+    **  @param [in] byteVal
+    **  @return
+    **/
+    static  BtByte
+    readSBoxTable(
+            const   BtByte  byteVal);
+
 private:
     void  testAdvancedEncryptionStandard();
     void  testDecryptData();
@@ -267,6 +320,56 @@ AdvancedEncryptionStandardTest::runEncryptSteps(
     CPPUNIT_ASSERT_EQUAL(0, compareArray(expect[i][4], state.w));
 
     return;
+}
+
+//----------------------------------------------------------------
+//    各ラウンド用のキーを生成する。
+//
+
+inline  ErrCode
+AdvancedEncryptionStandardTest::generateRoundKeys(
+        const   LpcByte     baseKey,
+        const   int         keySize,
+        const   int         numRounds,
+        CryptRoundKeys    & outKeys)
+{
+    return ( Testee::generateRoundKeys(
+                     baseKey, keySize, numRounds, outKeys)
+    );
+}
+
+//----------------------------------------------------------------
+//    テーブル Inv SBox の内容を参照する
+//
+
+inline  BtByte
+AdvancedEncryptionStandardTest::readInvSBoxTable(
+        const   BtByte  byteVal)
+{
+    return ( Testee::readInvSBoxTable(byteVal) );
+}
+
+//----------------------------------------------------------------
+//    テーブル MixColConv の内容を参照する。
+//
+
+inline  BtByte
+AdvancedEncryptionStandardTest::readMixColConvTable(
+        const   BtByte  idxByte,
+        const   BtByte  mulVal)
+{
+    return ( Testee::readMixColConvTable(idxByte, mulVal) );
+}
+
+//----------------------------------------------------------------
+//    テーブル SBox の内容を参照する
+//
+
+inline  BtByte
+AdvancedEncryptionStandardTest::readSBoxTable(
+        const   BtByte  byteVal)
+{
+    return ( Testee::readSBoxTable(byteVal) );
 }
 
 }   //  End of namespace  Crypts

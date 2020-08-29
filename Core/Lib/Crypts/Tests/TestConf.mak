@@ -14,7 +14,8 @@ TESTS                   =  \
 TARGET_TESTEE_LIBRARY       +=  -lctCrypts
 
 DIST_NOINST_DATA_FILES      +=
-DIST_NOINST_HEADER_FILES    +=
+DIST_NOINST_HEADER_FILES    +=  \
+        AdvancedEncryptionStandardTest.h
 EXTRA_TEST_DRIVERS          +=
 LIBRARY_TEST_DRIVERS        +=
 SOURCE_TEST_DRIVERS         +=

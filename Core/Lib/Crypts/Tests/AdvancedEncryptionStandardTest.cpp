@@ -826,7 +826,7 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys1()
 
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
-            Testee::generateRoundKeys(keys, 4, 10, w));
+            generateRoundKeys(keys, 4, 10, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 
     return;
@@ -860,7 +860,7 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys2()
 
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
-            Testee::generateRoundKeys(keys, 4, 10, w));
+            generateRoundKeys(keys, 4, 10, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 
     return;
@@ -900,7 +900,7 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys3()
 
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
-            Testee::generateRoundKeys(keys, 8, 14, w));
+            generateRoundKeys(keys, 8, 14, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 
     return;
@@ -940,7 +940,7 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys4()
 
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
-            Testee::generateRoundKeys(keys, 8, 14, w));
+            generateRoundKeys(keys, 8, 14, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 
     return;
@@ -977,7 +977,7 @@ void  AdvancedEncryptionStandardTest::testGenerateRoundKeys5()
 
     CPPUNIT_ASSERT_EQUAL(
             ERR_SUCCESS,
-            Testee::generateRoundKeys(keys, 6, 12, w));
+            generateRoundKeys(keys, 6, 12, w));
     CPPUNIT_ASSERT_EQUAL(0, checkRoundKeys(expect, w));
 
     return;
@@ -991,7 +991,7 @@ void  AdvancedEncryptionStandardTest::testReadInvSBoxTable()
 
     for ( int i = 0; i <= 255; ++ i ) {
         const   BtByte  val     = static_cast<BtByte>(i);
-        const   int     actual  = Testee::readInvSBoxTable(val);
+        const   int     actual  = readInvSBoxTable(val);
 
         const  int  b7  = (val >> 7) & 0x01;
         const  int  b6  = (val >> 6) & 0x01;
@@ -1028,12 +1028,12 @@ void  AdvancedEncryptionStandardTest::testReadMixColConvTable()
 {
     for ( int i = 0; i < 255; ++ i ) {
         const   BtByte  y1  = static_cast<BtByte>(i);
-        const   BtWord  y2  = Testee::readMixColConvTable(y1, 0);
-        const   BtWord  y3  = Testee::readMixColConvTable(y1, 1);
-        const   BtWord  yE  = Testee::readMixColConvTable(y1, 2);
-        const   BtWord  y9  = Testee::readMixColConvTable(y1, 3);
-        const   BtWord  yD  = Testee::readMixColConvTable(y1, 4);
-        const   BtWord  yB  = Testee::readMixColConvTable(y1, 5);
+        const   BtWord  y2  = readMixColConvTable(y1, 0);
+        const   BtWord  y3  = readMixColConvTable(y1, 1);
+        const   BtWord  yE  = readMixColConvTable(y1, 2);
+        const   BtWord  y9  = readMixColConvTable(y1, 3);
+        const   BtWord  yD  = readMixColConvTable(y1, 4);
+        const   BtWord  yB  = readMixColConvTable(y1, 5);
 
         const   BtWord  x2  = (y1 << 1) ^ (y1 & 0x80 ? 0x11B : 0x00);
         const   BtWord  x4  = (x2 << 1) ^ (x2 & 0x80 ? 0x11B : 0x00);
@@ -1064,7 +1064,7 @@ void  AdvancedEncryptionStandardTest::testReadSBoxTable()
 
     for ( int i = 0; i <= 255; ++ i ) {
         const   BtByte  val     = static_cast<BtByte>(i);
-        const   int     actual  = Testee::readSBoxTable(val);
+        const   int     actual  = readSBoxTable(val);
 
         BtByte  tmp = val;
         tmp = tableInvs[tmp];
