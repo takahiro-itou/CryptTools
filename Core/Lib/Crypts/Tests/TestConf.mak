@@ -5,7 +5,7 @@
 
 EXTRATESTS              =
 TESTS                   =  \
-        AdvancedEncryptionStandardTest  \
+        AesInterfaceTest                \
         ${EXTRATESTS}
 ##
 ##    Test Configurations.
@@ -33,4 +33,6 @@ TEST_LDFLAGS_COMMON         +=
 
 AdvancedEncryptionStandardTest_SOURCES  =  \
         AdvancedEncryptionStandardTest.cpp
+
+AesInterfaceTest_SOURCES    =  AesInterfaceTest.cpp
 
