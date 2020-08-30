@@ -106,6 +106,7 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 }
 
 #define     INV_MIX_COLUMN(state)
+
 #define     INV_SUB_BYTES(state)                \
 {                                               \
     for ( int i = 0; i < 16; ++ i ) {           \
@@ -117,7 +118,30 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
     }                                           \
 }
 
-#define     INV_SHIFT_ROWS(state)
+#define     INV_SHIFT_ROWS(state)               \
+{                                               \
+    const   BtWord  w0  = state.w[0];           \
+    const   BtWord  w1  = state.w[1];           \
+    const   BtWord  w2  = state.w[2];           \
+    const   BtWord  w3  = state.w[3];           \
+    state.w[0]  = (w0 & 0x000000FF)             \
+            | (w3 & 0x0000FF00)                 \
+            | (w2 & 0x00FF0000)                 \
+            | (w1 & 0xFF000000);                \
+    state.w[1]  = (w1 & 0x000000FF)             \
+            | (w0 & 0x0000FF00)                 \
+            | (w3 & 0x00FF0000)                 \
+            | (w2 & 0xFF000000);                \
+    state.w[2]  = (w2 & 0x000000FF)             \
+            | (w1 & 0x0000FF00)                 \
+            | (w0 & 0x00FF0000)                 \
+            | (w3 & 0xFF000000);                \
+    state.w[3]  = (w3 & 0x000000FF)             \
+            | (w2 & 0x0000FF00)                 \
+            | (w1 & 0x00FF0000)                 \
+            | (w0 & 0xFF000000);                \
+}
+
 #define     MIX_COLUMN(state)
 
 #define     SUB_BYTES(state)                    \
