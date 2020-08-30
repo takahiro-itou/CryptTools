@@ -207,12 +207,13 @@ AdvancedEncryptionStandard::decryptData(
 
     memcpy(state.s, inData, sizeof(state.s));
 
+    generateRoundKeys(baseKey, keyLen, numRounds, rKeys);
     ADD_ROUND_KEY(rKeys[numRounds], state);
 
-    for ( int i = numRounds - 1; i >= 1; -- i ) {
+    for ( int curRound = numRounds - 1; curRound >= 1; -- curRound ) {
         INV_SHIFT_ROWS(state);
         INV_SUB_BYTES(state);
-        ADD_ROUND_KEY(rKeys[i], state);
+        ADD_ROUND_KEY(rKeys[curRound], state);
         INV_MIX_COLUMN(state);
     }
 
