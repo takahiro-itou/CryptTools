@@ -99,10 +99,10 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 
 #define     ADD_ROUND_KEY(key, state)           \
 {                                               \
-    state.w[0]  = key[0];                       \
-    state.w[1]  = key[1];                       \
-    state.w[2]  = key[2];                       \
-    state.w[3]  = key[3];                       \
+    state.w[0]  ^= key[0];                      \
+    state.w[1]  ^= key[1];                      \
+    state.w[2]  ^= key[2];                      \
+    state.w[3]  ^= key[3];                      \
 }
 
 #define     INV_MIX_COLUMN(state)
