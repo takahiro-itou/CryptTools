@@ -149,6 +149,7 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
         for ( int j = 0; j < 256; ++ j ) {      \
             if ( g_tblSBox[j] == state.s[i] ) { \
                 state.s[i]  = (j & 0xFF);       \
+                break;                          \
             }                                   \
         }                                       \
     }                                           \
