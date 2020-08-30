@@ -20,6 +20,8 @@
 
 #include    "CryptTools/Crypts/AdvancedEncryptionStandard.h"
 
+#include    <memory.h>
+
 CRYPTTOOLS_NAMESPACE_BEGIN
 namespace  Crypts  {
 
@@ -95,7 +97,14 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 
 //----------------------------------------------------------------
 
-#define     ADD_ROUND_KEY(key, state)
+#define     ADD_ROUND_KEY(key, state)           \
+{                                               \
+    state.w[0]  = key[0];                       \
+    state.w[1]  = key[1];                       \
+    state.w[2]  = key[2];                       \
+    state.w[3]  = key[3];                       \
+}
+
 #define     INV_MIX_COLUMN(state)
 #define     INV_SUB_BYTES(state)
 #define     INV_SHIFT_ROWS(state)
@@ -194,6 +203,9 @@ AdvancedEncryptionStandard::decryptData(
     const  int  keyLen      = static_cast<int>(cryptFlag);
     const  int  numRounds   = keyLen + 6;
     CryptRoundKeys  rKeys;
+    TState          state;
+
+    memcpy(state.s, inData, sizeof(state.s));
 
     ADD_ROUND_KEY(rKeys[numRounds], state);
 
@@ -207,6 +219,8 @@ AdvancedEncryptionStandard::decryptData(
     INV_SHIFT_ROWS(state);
     INV_SUB_BYTES(state);
     ADD_ROUND_KEY(rKeys[0], state);
+
+    memcpy(outData, state.s, sizeof(state.s));
 
     return ( ERR_SUCCESS );
 }
@@ -225,21 +239,26 @@ AdvancedEncryptionStandard::encryptData(
     const  int  keyLen      = static_cast<int>(cryptFlag);
     const  int  numRounds   = keyLen + 6;
     CryptRoundKeys  rKeys;
+    TState          state;
+
+    memcpy(state.s, inData, sizeof(state.s));
 
     generateRoundKeys(baseKey, keyLen, numRounds, rKeys);
 
-    ADD_ROUND_KEY(rKeys[i], state);
+    ADD_ROUND_KEY(rKeys[0], state);
 
     for ( int curRound = 1; curRound < numRounds; ++ curRound ) {
         SUB_BYTES(state);
         SHIFT_ROWS(state);
         MIX_COLUMN(state);
-        ADD_ROUND_KEY(rKeys[i], state);
+        ADD_ROUND_KEY(rKeys[curRound], state);
     }
 
     SUB_BYTES(state);
     SHIFT_ROWS(state);
     ADD_ROUND_KEY(rKeys[numRounds], state);
+
+    memcpy(outData, state.s, sizeof(state.s));
 
     return ( ERR_SUCCESS );
 }
