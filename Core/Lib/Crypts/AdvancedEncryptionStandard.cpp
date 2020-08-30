@@ -106,7 +106,17 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 }
 
 #define     INV_MIX_COLUMN(state)
-#define     INV_SUB_BYTES(state)
+#define     INV_SUB_BYTES(state)                \
+{                                               \
+    for ( int i = 0; i < 16; ++ i ) {           \
+        for ( int j = 0; j < 256; ++ j ) {      \
+            if ( g_tblSBox[j] == state.s[i] ) { \
+                state.s[i]  = (j & 0xFF);       \
+            }                                   \
+        }                                       \
+    }                                           \
+}
+
 #define     INV_SHIFT_ROWS(state)
 #define     MIX_COLUMN(state)
 
