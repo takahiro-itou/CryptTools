@@ -109,7 +109,27 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 #define     INV_SUB_BYTES(state)
 #define     INV_SHIFT_ROWS(state)
 #define     MIX_COLUMN(state)
-#define     SUB_BYTES(state)
+
+#define     SUB_BYTES(state)                    \
+{                                               \
+    state.s[ 0] = g_tblSBox[ state.s[ 0] ];     \
+    state.s[ 1] = g_tblSBox[ state.s[ 1] ];     \
+    state.s[ 2] = g_tblSBox[ state.s[ 2] ];     \
+    state.s[ 3] = g_tblSBox[ state.s[ 3] ];     \
+    state.s[ 4] = g_tblSBox[ state.s[ 4] ];     \
+    state.s[ 5] = g_tblSBox[ state.s[ 5] ];     \
+    state.s[ 6] = g_tblSBox[ state.s[ 6] ];     \
+    state.s[ 7] = g_tblSBox[ state.s[ 7] ];     \
+    state.s[ 8] = g_tblSBox[ state.s[ 8] ];     \
+    state.s[ 9] = g_tblSBox[ state.s[ 9] ];     \
+    state.s[10] = g_tblSBox[ state.s[10] ];     \
+    state.s[11] = g_tblSBox[ state.s[11] ];     \
+    state.s[12] = g_tblSBox[ state.s[12] ];     \
+    state.s[13] = g_tblSBox[ state.s[13] ];     \
+    state.s[14] = g_tblSBox[ state.s[14] ];     \
+    state.s[15] = g_tblSBox[ state.s[15] ];     \
+}
+
 #define     SHIFT_ROWS(state)
 
 //----------------------------------------------------------------
