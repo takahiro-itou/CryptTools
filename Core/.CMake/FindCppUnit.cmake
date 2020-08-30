@@ -27,18 +27,20 @@ If ( CPPUNIT_DIR )
         ${CPPUNIT_DIR}/lib
         ${CPPUNIT_INCLUDE_DIR}/../lib
     )
+    Find_Library (CPPUNIT_LIBRARY  cppunit
+        ${CPPUNIT_LIBRARY_SEARCH_DIRS}
+        NO_DEFAULT_PATH
+    )
 Else  ()
     Set (CPPUNIT_LIBRARY_SEARCH_DIRS
         ${CPPUNIT_INCLUDE_DIR}/../lib
-        /usr/local/lib  /usr/lib
+    )
+    Find_Library (CPPUNIT_LIBRARY  cppunit
+        ${CPPUNIT_LIBRARY_SEARCH_DIRS}
     )
 Endif ()
 
 Message (STATUS  "Searching CPPUNIT : ${CPPUNIT_LIBRARY_SEARCH_DIRS}")
-Find_Library (CPPUNIT_LIBRARY  cppunit
-    ${CPPUNIT_LIBRARY_SEARCH_DIRS}
-    NO_DEFAULT_PATH
-)
 
 ##
 ##    検索結果を変数に格納する。
