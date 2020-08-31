@@ -97,12 +97,12 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
 
 //----------------------------------------------------------------
 
-#define     ADD_ROUND_KEY(key, state)           \
-{                                               \
-    state.w[0]  ^= key[0];                      \
-    state.w[1]  ^= key[1];                      \
-    state.w[2]  ^= key[2];                      \
-    state.w[3]  ^= key[3];                      \
+#define     ADD_ROUND_KEY(key, state)                           \
+{                                                               \
+    state.w[0]  ^= key[0];                                      \
+    state.w[1]  ^= key[1];                                      \
+    state.w[2]  ^= key[2];                                      \
+    state.w[3]  ^= key[3];                                      \
 }
 
 #define     INV_MIX_COLUMN(state)               \
@@ -143,40 +143,40 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
     }                                           \
 }
 
-#define     INV_SUB_BYTES(state)                \
-{                                               \
-    for ( int i = 0; i < 16; ++ i ) {           \
-        for ( int j = 0; j < 256; ++ j ) {      \
-            if ( g_tblSBox[j] == state.s[i] ) { \
-                state.s[i]  = (j & 0xFF);       \
-                break;                          \
-            }                                   \
-        }                                       \
-    }                                           \
+#define     INV_SUB_BYTES(state)                                \
+{                                                               \
+    state.s[ 0] = g_tblInvSBox[ state.s[ 0] ];                  \
+    state.s[ 1] = g_tblInvSBox[ state.s[ 1] ];                  \
+    state.s[ 2] = g_tblInvSBox[ state.s[ 2] ];                  \
+    state.s[ 3] = g_tblInvSBox[ state.s[ 3] ];                  \
+    state.s[ 4] = g_tblInvSBox[ state.s[ 4] ];                  \
+    state.s[ 5] = g_tblInvSBox[ state.s[ 5] ];                  \
+    state.s[ 6] = g_tblInvSBox[ state.s[ 6] ];                  \
+    state.s[ 7] = g_tblInvSBox[ state.s[ 7] ];                  \
+    state.s[ 8] = g_tblInvSBox[ state.s[ 8] ];                  \
+    state.s[ 9] = g_tblInvSBox[ state.s[ 9] ];                  \
+    state.s[10] = g_tblInvSBox[ state.s[10] ];                  \
+    state.s[11] = g_tblInvSBox[ state.s[11] ];                  \
+    state.s[12] = g_tblInvSBox[ state.s[12] ];                  \
+    state.s[13] = g_tblInvSBox[ state.s[13] ];                  \
+    state.s[14] = g_tblInvSBox[ state.s[14] ];                  \
+    state.s[15] = g_tblInvSBox[ state.s[15] ];                  \
 }
 
-#define     INV_SHIFT_ROWS(state)               \
-{                                               \
-    const   BtWord  w0  = state.w[0];           \
-    const   BtWord  w1  = state.w[1];           \
-    const   BtWord  w2  = state.w[2];           \
-    const   BtWord  w3  = state.w[3];           \
-    state.w[0]  = (w0 & 0x000000FF)             \
-            | (w3 & 0x0000FF00)                 \
-            | (w2 & 0x00FF0000)                 \
-            | (w1 & 0xFF000000);                \
-    state.w[1]  = (w1 & 0x000000FF)             \
-            | (w0 & 0x0000FF00)                 \
-            | (w3 & 0x00FF0000)                 \
-            | (w2 & 0xFF000000);                \
-    state.w[2]  = (w2 & 0x000000FF)             \
-            | (w1 & 0x0000FF00)                 \
-            | (w0 & 0x00FF0000)                 \
-            | (w3 & 0xFF000000);                \
-    state.w[3]  = (w3 & 0x000000FF)             \
-            | (w2 & 0x0000FF00)                 \
-            | (w1 & 0x00FF0000)                 \
-            | (w0 & 0xFF000000);                \
+#define     INV_SHIFT_ROWS(state)                               \
+{                                                               \
+    const   BtWord  w0  = state.w[0];                           \
+    const   BtWord  w1  = state.w[1];                           \
+    const   BtWord  w2  = state.w[2];                           \
+    const   BtWord  w3  = state.w[3];                           \
+    state.w[0]  = (w0 & 0x000000FF) | (w3 & 0x0000FF00)         \
+            | (w2 & 0x00FF0000) | (w1 & 0xFF000000);            \
+    state.w[1]  = (w1 & 0x000000FF) | (w0 & 0x0000FF00)         \
+            | (w3 & 0x00FF0000) | (w2 & 0xFF000000);            \
+    state.w[2]  = (w2 & 0x000000FF) | (w1 & 0x0000FF00)         \
+            | (w0 & 0x00FF0000) | (w3 & 0xFF000000);            \
+    state.w[3]  = (w3 & 0x000000FF) | (w2 & 0x0000FF00)         \
+            | (w1 & 0x00FF0000) | (w0 & 0xFF000000);            \
 }
 
 #define     MIX_COLUMN(state)                   \
@@ -197,48 +197,40 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
     }                                                   \
 }
 
-#define     SUB_BYTES(state)                    \
-{                                               \
-    state.s[ 0] = g_tblSBox[ state.s[ 0] ];     \
-    state.s[ 1] = g_tblSBox[ state.s[ 1] ];     \
-    state.s[ 2] = g_tblSBox[ state.s[ 2] ];     \
-    state.s[ 3] = g_tblSBox[ state.s[ 3] ];     \
-    state.s[ 4] = g_tblSBox[ state.s[ 4] ];     \
-    state.s[ 5] = g_tblSBox[ state.s[ 5] ];     \
-    state.s[ 6] = g_tblSBox[ state.s[ 6] ];     \
-    state.s[ 7] = g_tblSBox[ state.s[ 7] ];     \
-    state.s[ 8] = g_tblSBox[ state.s[ 8] ];     \
-    state.s[ 9] = g_tblSBox[ state.s[ 9] ];     \
-    state.s[10] = g_tblSBox[ state.s[10] ];     \
-    state.s[11] = g_tblSBox[ state.s[11] ];     \
-    state.s[12] = g_tblSBox[ state.s[12] ];     \
-    state.s[13] = g_tblSBox[ state.s[13] ];     \
-    state.s[14] = g_tblSBox[ state.s[14] ];     \
-    state.s[15] = g_tblSBox[ state.s[15] ];     \
+#define     SUB_BYTES(state)                                    \
+{                                                               \
+    state.s[ 0] = g_tblSBox[ state.s[ 0] ];                     \
+    state.s[ 1] = g_tblSBox[ state.s[ 1] ];                     \
+    state.s[ 2] = g_tblSBox[ state.s[ 2] ];                     \
+    state.s[ 3] = g_tblSBox[ state.s[ 3] ];                     \
+    state.s[ 4] = g_tblSBox[ state.s[ 4] ];                     \
+    state.s[ 5] = g_tblSBox[ state.s[ 5] ];                     \
+    state.s[ 6] = g_tblSBox[ state.s[ 6] ];                     \
+    state.s[ 7] = g_tblSBox[ state.s[ 7] ];                     \
+    state.s[ 8] = g_tblSBox[ state.s[ 8] ];                     \
+    state.s[ 9] = g_tblSBox[ state.s[ 9] ];                     \
+    state.s[10] = g_tblSBox[ state.s[10] ];                     \
+    state.s[11] = g_tblSBox[ state.s[11] ];                     \
+    state.s[12] = g_tblSBox[ state.s[12] ];                     \
+    state.s[13] = g_tblSBox[ state.s[13] ];                     \
+    state.s[14] = g_tblSBox[ state.s[14] ];                     \
+    state.s[15] = g_tblSBox[ state.s[15] ];                     \
 }
 
-#define     SHIFT_ROWS(state)                   \
-{                                               \
-    const   BtWord  w0  = state.w[0];           \
-    const   BtWord  w1  = state.w[1];           \
-    const   BtWord  w2  = state.w[2];           \
-    const   BtWord  w3  = state.w[3];           \
-    state.w[0]  = (w0 & 0x000000FF)             \
-            | (w1 & 0x0000FF00)                 \
-            | (w2 & 0x00FF0000)                 \
-            | (w3 & 0xFF000000);                \
-    state.w[1]  = (w1 & 0x000000FF)             \
-            | (w2 & 0x0000FF00)                 \
-            | (w3 & 0x00FF0000)                 \
-            | (w0 & 0xFF000000);                \
-    state.w[2]  = (w2 & 0x000000FF)             \
-            | (w3 & 0x0000FF00)                 \
-            | (w0 & 0x00FF0000)                 \
-            | (w1 & 0xFF000000);                \
-    state.w[3]  = (w3 & 0x000000FF)             \
-            | (w0 & 0x0000FF00)                 \
-            | (w1 & 0x00FF0000)                 \
-            | (w2 & 0xFF000000);                \
+#define     SHIFT_ROWS(state)                                   \
+{                                                               \
+    const   BtWord  w0  = state.w[0];                           \
+    const   BtWord  w1  = state.w[1];                           \
+    const   BtWord  w2  = state.w[2];                           \
+    const   BtWord  w3  = state.w[3];                           \
+    state.w[0]  = (w0 & 0x000000FF) | (w1 & 0x0000FF00)         \
+            | (w2 & 0x00FF0000) | (w3 & 0xFF000000);            \
+    state.w[1]  = (w1 & 0x000000FF) | (w2 & 0x0000FF00)         \
+            | (w3 & 0x00FF0000) | (w0 & 0xFF000000);            \
+    state.w[2]  = (w2 & 0x000000FF) | (w3 & 0x0000FF00)         \
+            | (w0 & 0x00FF0000) | (w1 & 0xFF000000);            \
+    state.w[3]  = (w3 & 0x000000FF) | (w0 & 0x0000FF00)         \
+            | (w1 & 0x00FF0000) | (w2 & 0xFF000000);            \
 }
 
 //----------------------------------------------------------------
