@@ -144,42 +144,34 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
     state.w[3]  ^= key[3];                                      \
 }
 
-#define     INV_MIX_COLUMN(state)               \
-{                                               \
-    for ( int c = 0; c < 4; ++ c ) {            \
-        const   BtByte  b0  = state.s[c*4  ];   \
-        const   BtByte  b1  = state.s[c*4+1];   \
-        const   BtByte  b2  = state.s[c*4+2];   \
-        const   BtByte  b3  = state.s[c*4+3];   \
-        const   BtByte  b0_x2   = (b0 << 1) ^ (b0 & 0x80 ? 0x1B : 0);   \
-        const   BtByte  b1_x2   = (b1 << 1) ^ (b1 & 0x80 ? 0x1B : 0);   \
-        const   BtByte  b2_x2   = (b2 << 1) ^ (b2 & 0x80 ? 0x1B : 0);   \
-        const   BtByte  b3_x2   = (b3 << 1) ^ (b3 & 0x80 ? 0x1B : 0);   \
-        const   BtByte  b0_x4   = (b0_x2<<1) ^ (b0_x2 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b1_x4   = (b1_x2<<1) ^ (b1_x2 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b2_x4   = (b2_x2<<1) ^ (b2_x2 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b3_x4   = (b3_x2<<1) ^ (b3_x2 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b0_x8   = (b0_x4<<1) ^ (b0_x4 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b1_x8   = (b1_x4<<1) ^ (b1_x4 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b2_x8   = (b2_x4<<1) ^ (b2_x4 & 0x80 ? 0x1B : 0); \
-        const   BtByte  b3_x8   = (b3_x4<<1) ^ (b3_x4 & 0x80 ? 0x1B : 0); \
-        state.s[c*4  ]  = (b0_x8 ^ b0_x4 ^ b0_x2)       \
-                ^ (b1_x8 ^ b1_x2 ^ b1)                  \
-                ^ (b2_x8 ^ b2_x4 ^ b2)                  \
-                ^ (b3_x8 ^ b3);                         \
-        state.s[c*4+1]  = (b0_x8 ^ b0)                  \
-                ^ (b1_x8 ^ b1_x4 ^ b1_x2)               \
-                ^ (b2_x8 ^ b2_x2 ^ b2)                  \
-                ^ (b3_x8 ^ b3_x4 ^ b3);                 \
-        state.s[c*4+2]  = (b0_x8 ^ b0_x4 ^ b0)          \
-                ^ (b1_x8 ^ b1)                          \
-                ^ (b2_x8 ^ b2_x4 ^ b2_x2)               \
-                ^ (b3_x8 ^ b3_x2 ^ b3);                 \
-        state.s[c*4+3]  = (b0_x8 ^ b0_x2 ^ b0)          \
-                ^ (b1_x8 ^ b1_x4 ^ b1)                  \
-                ^ (b2_x8 ^ b2)                          \
-                ^ (b3_x8 ^ b3_x4 ^ b3_x2);              \
-    }                                           \
+#define     INV_MIX_COLUMN(state)                               \
+{                                                               \
+    for ( int c = 0; c < 4; ++ c ) {                            \
+        const   BtByte  s0      = state.s[c * 4    ];           \
+        const   BtByte  s1      = state.s[c * 4 + 1];           \
+        const   BtByte  s2      = state.s[c * 4 + 2];           \
+        const   BtByte  s3      = state.s[c * 4 + 3];           \
+        const   BtByte  s0_xE   = g_tblMixCol[s0][2];           \
+        const   BtByte  s0_x9   = g_tblMixCol[s0][3];           \
+        const   BtByte  s0_xD   = g_tblMixCol[s0][4];           \
+        const   BtByte  s0_xB   = g_tblMixCol[s0][5];           \
+        const   BtByte  s1_xE   = g_tblMixCol[s1][2];           \
+        const   BtByte  s1_x9   = g_tblMixCol[s1][3];           \
+        const   BtByte  s1_xD   = g_tblMixCol[s1][4];           \
+        const   BtByte  s1_xB   = g_tblMixCol[s1][5];           \
+        const   BtByte  s2_xE   = g_tblMixCol[s2][2];           \
+        const   BtByte  s2_x9   = g_tblMixCol[s2][3];           \
+        const   BtByte  s2_xD   = g_tblMixCol[s2][4];           \
+        const   BtByte  s2_xB   = g_tblMixCol[s2][5];           \
+        const   BtByte  s3_xE   = g_tblMixCol[s3][2];           \
+        const   BtByte  s3_x9   = g_tblMixCol[s3][3];           \
+        const   BtByte  s3_xD   = g_tblMixCol[s3][4];           \
+        const   BtByte  s3_xB   = g_tblMixCol[s3][5];           \
+        state.s[c*4  ]  = (s0_xE ^ s1_xB ^ s2_xD ^ s3_x9);      \
+        state.s[c*4+1]  = (s0_x9 ^ s1_xE ^ s2_xB ^ s3_xD);      \
+        state.s[c*4+2]  = (s0_xD ^ s1_x9 ^ s2_xE ^ s3_xB);      \
+        state.s[c*4+3]  = (s0_xB ^ s1_xD ^ s2_x9 ^ s3_xE);      \
+    }                                                           \
 }
 
 #define     INV_SUB_BYTES(state)                                \
