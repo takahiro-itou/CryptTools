@@ -218,22 +218,22 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
             | (w1 & 0x00FF0000) | (w0 & 0xFF000000);            \
 }
 
-#define     MIX_COLUMN(state)                   \
-{                                               \
-    for ( int c = 0; c < 4; ++ c ) {            \
-        const   BtByte  b0  = state.s[c*4  ];   \
-        const   BtByte  b1  = state.s[c*4+1];   \
-        const   BtByte  b2  = state.s[c*4+2];   \
-        const   BtByte  b3  = state.s[c*4+3];   \
-        const   BtByte  s02 = (b0 << 1) ^ (b0 & 0x80 ? 0x1B : 0x00);    \
-        const   BtByte  s12 = (b1 << 1) ^ (b1 & 0x80 ? 0x1B : 0x00);    \
-        const   BtByte  s22 = (b2 << 1) ^ (b2 & 0x80 ? 0x1B : 0x00);    \
-        const   BtByte  s32 = (b3 << 1) ^ (b3 & 0x80 ? 0x1B : 0x00);    \
-        state.s[c*4  ]  = (s02 ^ s12 ^ b1 ^ b2 ^ b3);   \
-        state.s[c*4+1]  = (b0 ^ s12 ^ s22 ^ b2 ^ b3);   \
-        state.s[c*4+2]  = (b0 ^ b1 ^ s22 ^ s32 ^ b3);   \
-        state.s[c*4+3]  = (s02 ^ b0 ^ b1 ^ b2 ^ s32);   \
-    }                                                   \
+#define     MIX_COLUMN(state)                                   \
+{                                                               \
+    for ( int c = 0; c < 4; ++ c ) {                            \
+        const   BtByte  s0      = state.s[c * 4    ];           \
+        const   BtByte  s1      = state.s[c * 4 + 1];           \
+        const   BtByte  s2      = state.s[c * 4 + 2];           \
+        const   BtByte  s3      = state.s[c * 4 + 3];           \
+        const   BtByte  s0_x2   = g_tblMixCol[s0][0];           \
+        const   BtByte  s1_x2   = g_tblMixCol[s1][0];           \
+        const   BtByte  s2_x2   = g_tblMixCol[s2][0];           \
+        const   BtByte  s3_x2   = g_tblMixCol[s3][0];           \
+        state.s[c*4  ]  = (s0_x2 ^ (s1_x2 ^ s1) ^ s2 ^ s3);     \
+        state.s[c*4+1]  = (s0 ^ s1_x2 ^ (s2_x2 ^ s2) ^ s3);     \
+        state.s[c*4+2]  = (s0 ^ s1 ^ s2_x2 ^ (s3_x2 ^ s3));     \
+        state.s[c*4+3]  = ((s0_x2 ^ s0) ^ s1 ^ s2 ^ s3_x2);     \
+    }                                                           \
 }
 
 #define     SUB_BYTES(state)                                    \
