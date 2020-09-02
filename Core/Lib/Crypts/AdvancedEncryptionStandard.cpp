@@ -229,10 +229,14 @@ CONSTEXPR_VAR   BtByte  g_tblMixCol[256][6] = {
         const   BtByte  s1_x2   = g_tblMixCol[s1][0];           \
         const   BtByte  s2_x2   = g_tblMixCol[s2][0];           \
         const   BtByte  s3_x2   = g_tblMixCol[s3][0];           \
-        state.s[c*4  ]  = (s0_x2 ^ (s1_x2 ^ s1) ^ s2 ^ s3);     \
-        state.s[c*4+1]  = (s0 ^ s1_x2 ^ (s2_x2 ^ s2) ^ s3);     \
-        state.s[c*4+2]  = (s0 ^ s1 ^ s2_x2 ^ (s3_x2 ^ s3));     \
-        state.s[c*4+3]  = ((s0_x2 ^ s0) ^ s1 ^ s2 ^ s3_x2);     \
+        const   BtByte  s0_x3   = g_tblMixCol[s0][1];           \
+        const   BtByte  s1_x3   = g_tblMixCol[s1][2];           \
+        const   BtByte  s2_x3   = g_tblMixCol[s2][3];           \
+        const   BtByte  s3_x3   = g_tblMixCol[s3][4];           \
+        state.s[c*4  ]  = (s0_x2 ^ s1_x3 ^ s2 ^ s3);            \
+        state.s[c*4+1]  = (s0 ^ s1_x2 ^ s2_x3 ^ s3);            \
+        state.s[c*4+2]  = (s0 ^ s1 ^ s2_x2 ^ s3_x3);            \
+        state.s[c*4+3]  = (s0_x3 ^ s1 ^ s2 ^ s3_x2);            \
     }                                                           \
 }
 
