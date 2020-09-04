@@ -33,6 +33,7 @@ DIST_NOINST_DATA_FILES      =  \
         ${EXTRA_NOINST_DATA_FILES}
 
 DIST_NOINST_HEADER_FILES    =  \
+        AesTables.h                     \
         ${EXTRA_NOINST_HEADER_FILES}
 
 INCLIB_HEADER_FILES         =  \
