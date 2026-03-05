@@ -45,5 +45,5 @@ dist_noinst_DATA        =  \
 ##
 
 CryptTools_SOURCES      =  CryptTools.cpp
-CryptTools_LDADD        =
+CryptTools_LDADD        =  -lctCrypts
 

@@ -3,7 +3,7 @@
 ##    List of Directories.
 ##
 
-SUBLIBS                 =  Common
+SUBLIBS                 =  Common  Crypts
 
 SUBDIRS                 =  Tests  .Config  $(SUBLIBS)  .
 

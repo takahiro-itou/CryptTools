@@ -123,6 +123,14 @@ MYAC_WITH_EXT_LIB(
 
 dnl----------------------------------------------------------------
 dnl
+dnl   Linker Scripts.
+dnl   リンカスクリプトを生成する。
+dnl
+
+m4_include([.M4/LinkerScripts.m4])
+
+dnl----------------------------------------------------------------
+dnl
 dnl   Outputs.
 dnl   出力ファイルを設定する。
 dnl
@@ -139,6 +147,7 @@ AC_CONFIG_FILES([
     Lib/Makefile
     Lib/.Config/Makefile
     Lib/Common/Makefile
+    Lib/Crypts/Makefile
 ])
 
 AC_CONFIG_FILES([
@@ -151,6 +160,7 @@ dnl
 
 AC_CONFIG_FILES([
     Lib/Common/Tests/Makefile
+    Lib/Crypts/Tests/Makefile
     Lib/Tests/Makefile
 ])
 

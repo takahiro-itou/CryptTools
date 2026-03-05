@@ -18,6 +18,8 @@
 **      @file       Tests/TestDriver.h
 **/
 
+#include    <iostream>
+
 #if !defined( CRYPTTOOLS_TESTS_INCLUDED_TEST_DRIVER_H )
 #    define   CRYPTTOOLS_TESTS_INCLUDED_TEST_DRIVER_H
 
@@ -94,5 +96,41 @@ void  assertEqual(
     assertEqual(exp,  act,  __FILE__,  __LINE__)
 
 #endif
+
+//========================================================================
+//
+//    Helper Functions.
+//
+
+//----------------------------------------------------------------
+/**   配列の内容を比較する。
+**
+**  @param [in] vExpect
+**  @param [in] vActual
+**  @return     一致しなかった要素の数。
+**/
+
+template  <typename  T,  size_t  N>
+inline  const   int
+compareArray(
+        const   T   (&vExpect)[N],
+        const   T   (&vActual)[N])
+{
+    int     counter = 0;
+    for ( size_t i = 0; i < N; ++ i ) {
+        if ( vExpect[i] != vActual[i] ) {
+            std::cerr   <<  "\nIndex = "    <<  std::dec
+                        <<  i               <<  std::hex
+                        <<  ", Expect: 0x"
+                        <<  static_cast<uint64_t>(vExpect[i])
+                        <<  ", Actual: 0x"
+                        <<  static_cast<uint64_t>(vActual[i])
+                        <<  std::endl;
+            ++ counter;
+        }
+    }
+
+    return ( counter );
+}
 
 #endif

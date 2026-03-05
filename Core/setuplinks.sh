@@ -65,7 +65,7 @@ if [ -d  Lib/${testcommondir}/Tests ] ; then
       &&  ${LN_S}  ../../Tests/.TestsCommon/CMakeLists.txt)
 fi
 
-for  dir  in  Common  ; do
+for  dir  in  Common  Crypts  ; do
     if [ -d Lib/${dir}/Tests ] ; then
         (cd  Lib/${dir}/Tests          \
           &&  ${RM_F}  Makefile.am     \
